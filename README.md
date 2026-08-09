@@ -63,6 +63,6 @@ NEXUS evolves through several architectural stages:
 - `docs/security`
 - `docs/runbooks`
 
-## Current Phase Phase 1 — Foundation
+## NEXUS — Phase 0: Planning ✅
 
-## Status 🚧 Active Development
+## NEXUS — Phase 1: Foundation 🚧
