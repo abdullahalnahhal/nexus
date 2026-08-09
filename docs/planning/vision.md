@@ -17,7 +17,7 @@ The core goal of NEXUS is to model the real operational flow of a retail/supply-
 
 ---
 
-# 2. Business Structure
+## 2. Business Structure
 
 NEXUS represents **one company**.
 
@@ -39,13 +39,13 @@ NEXUS
 └── Wallets
     ├── Bank Accounts
     ├── Branch Wallets
-    ├── POS / Cash Register Wallets
+    ├── POS Wallets
     └── ...
 ```
 
 ---
 
-# 3. Branches
+## 3. Branches
 
 A **Branch** represents a physical business location operated by NEXUS.
 
@@ -68,15 +68,17 @@ Branch
 └── Wallet
 ```
 
-### Branch Rule
+### Branch Rules
 
-> Every Branch MUST have exactly one Warehouse.
+1. Every Branch MUST have exactly one Warehouse.
+2. Every Branch MUST have one Branch Wallet.
+3. A Branch can have many POS terminals.
 
 The Branch Warehouse is the inventory source used by all POS terminals belonging to that Branch.
 
 ---
 
-# 4. Warehouses
+## 4. Warehouses
 
 A **Warehouse** represents a physical inventory location.
 
@@ -97,7 +99,7 @@ A Warehouse is responsible for holding stock and recording inventory movements.
 
 ### Warehouse Transactions
 
-Warehouse stock changes only through inventory transactions:
+Warehouse stock changes through inventory transactions:
 
 ```text
 Warehouse
@@ -108,9 +110,7 @@ Warehouse
     └── TRANSFER
 ```
 
-### Examples
-
-Receiving stock:
+### Receiving Stock
 
 ```text
 Supplier
@@ -121,7 +121,7 @@ Warehouse
    └── IN
 ```
 
-Transferring stock:
+### Transferring Stock
 
 ```text
 Central Warehouse
@@ -131,7 +131,7 @@ Central Warehouse
 Branch A Warehouse
 ```
 
-Selling stock:
+### Selling Stock
 
 ```text
 Branch A POS
@@ -145,38 +145,32 @@ Branch A Warehouse
       └── OUT
 ```
 
-The Order itself does not directly own inventory.
+The Order does not directly own inventory.
 
 The resulting inventory movement is recorded as a Warehouse transaction.
 
 ---
 
-# 5. POS — Point of Sale
+## 5. POS — Point of Sale / Cash Register
 
-A **POS** represents an actual sales point inside a Branch.
+A **POS is the Cash Register**.
 
-```text
-Branch A
-│
-├── Warehouse A
-│
-├── POS A1
-├── POS A2
-└── POS A3
-```
+They are the same business entity in NEXUS.
+
+A POS represents the actual sales point where a salesman operates, orders are created, payments are received, and the active work shift is managed.
 
 A POS:
 
 * Belongs to exactly one Branch.
 * Creates Orders.
 * Uses the Warehouse of its Branch automatically.
-* Has authorized users.
+* Has a Wallet.
+* Has authorized Users.
 * Operates through Work Shifts.
-* Is associated with a Cash Register / financial wallet.
 
-### Important Rule
+### POS and Warehouse
 
-> A POS does NOT have its own Warehouse.
+A POS does **not** have its own Warehouse.
 
 The inventory relationship is:
 
@@ -202,9 +196,25 @@ Branch A
 └── POS A3 ─────┘
 ```
 
+All sales made through POS A1, POS A2, and POS A3 affect the stock in Warehouse A.
+
+### POS Wallet
+
+Each POS has a Wallet.
+
+```text
+POS
+│
+├── Wallet
+├── Users
+└── Shifts
+```
+
+The POS Wallet records financial movements resulting from sales and other operations performed through the POS.
+
 ---
 
-# 6. Orders
+## 6. Orders
 
 An Order is created from a POS.
 
@@ -241,11 +251,12 @@ This allows NEXUS to determine automatically:
 * Which Branch made the sale.
 * Which POS created the Order.
 * Which Warehouse supplies the products.
-* Which financial wallet receives the payment.
+* Which financial Wallet receives the payment.
+* Which Work Shift was active when the Order was created.
 
 ---
 
-# 7. Wallets
+## 7. Wallets
 
 NEXUS uses a unified **Wallet** concept for financial accounts.
 
@@ -264,13 +275,34 @@ NEXUS may contain different types of Wallets, including:
 
 * Bank Account Wallet
 * Branch Wallet
-* Cash Register Wallet
 * POS Wallet
 * Other financial wallets as required
 
+### Wallet Transactions
+
+Wallet balances change through financial transactions:
+
+```text
+Wallet A
+   │
+   ├── INCOME
+   ├── OUTCOME
+   └── TRANSFER
+```
+
+For example:
+
+```text
+POS Wallet
+    │
+    │ TRANSFER
+    ▼
+Branch Wallet
+```
+
 ---
 
-# 8. Branch Wallet
+## 8. Branch Wallet
 
 Each Branch has one Wallet representing its financial safe/account.
 
@@ -285,44 +317,16 @@ Branch A
 
 The Branch Wallet represents the financial balance belonging to that Branch.
 
-For example:
-
-```text
-POS Cash Register
-       │
-       │ TRANSFER
-       ▼
-Branch Wallet
-```
+It can receive money from POS Wallets and participate in other financial operations.
 
 ---
 
-# 9. Cash Register
+## 9. Work Shifts
 
-A Cash Register represents the cash-handling point associated with a POS.
-
-Each Cash Register has a Wallet.
+A **Work Shift** represents a period during which a Sales Employee is responsible for operating a POS.
 
 ```text
 POS
-│
-└── Cash Register
-     │
-     └── Wallet
-```
-
-The Cash Register Wallet records financial movements resulting from sales and other cash operations.
-
----
-
-# 10. Work Shifts
-
-Sales operations at a Cash Register are organized into **Work Shifts**.
-
-A Shift represents a period during which a Sales Employee is responsible for a Cash Register.
-
-```text
-Cash Register
 │
 └── Shifts
     ├── Shift #001 → Salesman A
@@ -330,32 +334,43 @@ Cash Register
     └── ...
 ```
 
-### Shift Rule
+### Shift Rules
 
-> A Cash Register can have only one active Shift at a time.
+1. A POS can have many historical Shifts.
+2. A POS can have only one active Shift at a time.
+3. Each Shift is assigned to exactly one Sales Employee.
+4. Orders created during a Shift belong to that Shift's operational context.
 
-A Shift belongs to one Sales Employee.
+Example:
 
-The Shift provides the operational context for Orders and cash movements.
+```text
+POS A1
+   │
+   └── Active Shift #105
+          │
+          └── Salesman Abdullah
+                 │
+                 ├── Order #1001
+                 ├── Order #1002
+                 └── Order #1003
+```
 
 ---
 
-# 11. Users & Permissions
+## 10. Users & Permissions
 
-Users are not owned by a POS or Cash Register.
+Users are not owned by a POS.
 
-Instead, users are assigned permissions and operational access.
-
-For example:
+Instead, users have roles, permissions, and operational access.
 
 ```text
 User
 │
-├── Role
+├── Roles
 └── Permissions
 ```
 
-Possible permissions include:
+Examples of permissions:
 
 ```text
 VIEW_INVENTORY
@@ -366,11 +381,13 @@ VIEW_SALES
 ...
 ```
 
-A Sales Employee may be authorized to use a specific Cash Register/POS during a Shift.
+A Sales Employee may be authorized to operate a specific POS during a Shift.
+
+The ability to view inventory, create orders, open shifts, close shifts, or perform other operations is controlled through permissions.
 
 ---
 
-# 12. Core Business Flow
+## 11. Core Business Flow
 
 The primary retail flow in NEXUS is:
 
@@ -395,17 +412,25 @@ The primary retail flow in NEXUS is:
        Inventory      Payment          Customer
        Movement          │
           │              ▼
-          │         Cash Register
-          │              │
-          │              ▼
-          │            Wallet
+          │          POS Wallet
           │
           └──────────────┘
 ```
 
+The POS is the operational point that connects:
+
+* Sales
+* Orders
+* Customers
+* Work Shifts
+* Payments
+* POS Wallet
+* Branch
+* Branch Warehouse
+
 ---
 
-# 13. Fundamental Relationships
+## 12. Fundamental Relationships
 
 The current NEXUS model can be summarized as:
 
@@ -414,29 +439,61 @@ NEXUS
 │
 ├── Branches
 │   │
-│   ├── Warehouse (1)
-│   │
-│   ├── POS (N)
-│   │    │
-│   │    ├── Cash Register
-│   │    │     └── Wallet
-│   │    │
-│   │    └── Users / Shifts
-│   │
-│   └── Wallet (1)
+│   └── Branch
+│       ├── Warehouse (1)
+│       ├── POS (N)
+│       │   ├── Wallet (1)
+│       │   ├── Users / Access
+│       │   └── Shifts (N)
+│       │       └── Salesman (1)
+│       │
+│       └── Wallet (1)
 │
 ├── Warehouses
-│   └── Inventory Transactions
+│   └── Warehouse Transactions
 │
 └── Wallets
-    └── Financial Transactions
+    └── Wallet Transactions
+```
+
+### Key Relationships
+
+```text
+NEXUS
+  ├── has many Branches
+  ├── has many Warehouses
+  └── has many Wallets
+
+Branch
+  ├── has one Warehouse
+  ├── has many POS
+  └── has one Wallet
+
+POS
+  ├── belongs to one Branch
+  ├── uses its Branch Warehouse
+  ├── has one Wallet
+  ├── has many historical Shifts
+  └── has one active Shift at most
+
+Shift
+  └── belongs to one Sales Employee
+
+Warehouse
+  └── has many Inventory Transactions
+
+Wallet
+  └── has many Financial Transactions
+
+Order
+  ├── belongs to one POS
+  ├── belongs to one Shift
+  └── operates against the POS's Branch Warehouse
 ```
 
 ---
 
-# 14. Core Business Rules
-
-The initial NEXUS model establishes the following rules:
+## 13. Core Business Rules
 
 ### Branch
 
@@ -445,50 +502,53 @@ The initial NEXUS model establishes the following rules:
 3. Every Branch has one Branch Wallet.
 4. A Branch can have many POS terminals.
 
-### POS
-
-5. Every POS belongs to exactly one Branch.
-6. A POS does not own a Warehouse.
-7. A POS automatically operates against its Branch Warehouse.
-8. A POS creates Orders.
-9. A POS operates through a Cash Register.
-
 ### Warehouse
 
-10. NEXUS can have many Warehouses.
-11. A Warehouse records inventory transactions.
-12. Inventory movements are represented by IN, OUT, and TRANSFER operations.
+5. NEXUS can have many Warehouses.
+6. A Warehouse records inventory transactions.
+7. Inventory movements are represented by IN, OUT, and TRANSFER operations.
+
+### POS
+
+8. Every POS belongs to exactly one Branch.
+9. POS and Cash Register are the same entity.
+10. A POS does not own a Warehouse.
+11. A POS automatically operates against its Branch Warehouse.
+12. A POS has one Wallet.
+13. A POS creates Orders.
+14. A POS can have many historical Shifts.
+15. A POS can have only one active Shift at a time.
 
 ### Wallet
 
-13. NEXUS can have many Wallets.
-14. Branches have Wallets.
-15. Cash Registers have Wallets.
-16. Wallets record INCOME, OUTCOME, and TRANSFER transactions.
+16. NEXUS can have many Wallets.
+17. Branches have Wallets.
+18. POS terminals have Wallets.
+19. Wallets record INCOME, OUTCOME, and TRANSFER transactions.
 
 ### Shift
 
-17. A Cash Register can have only one active Shift.
-18. A Shift is assigned to one Sales Employee.
-19. Orders created during a Shift belong to its operational context.
+20. Each Shift is assigned to exactly one Sales Employee.
+21. A Sales Employee can operate a POS through an active Shift.
+22. Orders created during a Shift belong to that Shift's operational context.
 
 ### Order
 
-20. Orders are created from POS terminals.
-21. The Order's inventory source is determined by the POS's Branch Warehouse.
-22. Payment is recorded through the appropriate Wallet.
+23. Orders are created from POS terminals.
+24. The Order's inventory source is determined by the POS's Branch Warehouse.
+25. Payment is recorded through the appropriate Wallet.
+26. The Order does not directly own inventory.
 
 ---
 
-# 15. Current Domain Model
+## 14. Current Domain Model
 
-At this stage, the core domain entities are:
+At this stage, the core domain concepts are:
 
 ```text
 Branch
 Warehouse
 POS
-CashRegister
 Wallet
 WalletTransaction
 WarehouseTransaction
@@ -503,6 +563,7 @@ We deliberately do **not** introduce:
 * Company entity
 * Tenant entity
 * POS-specific Warehouse
+* CashRegister entity separate from POS
 * Multi-tenancy
 * Unnecessary abstractions
 
@@ -510,9 +571,9 @@ until an actual business requirement demands them.
 
 ---
 
-# 16. NEXUS Design Principle
+## 15. Design Principles
 
-The core design principle of NEXUS is:
+### Model the Real Business
 
 > **Model the real business, not the database.**
 
@@ -522,4 +583,92 @@ Every relationship should represent a real business relationship.
 
 Every transaction should represent a real business event.
 
-The architecture should emerge from these rules rather than forcing the business into predefined technical abstractions.
+### Avoid Premature Abstraction
+
+NEXUS is initially designed for one company.
+
+We do not introduce multi-tenancy, Company entities, or other abstractions until they are required by the business.
+
+### Transactions Are First-Class Business Events
+
+Inventory and financial changes are not simple field updates.
+
+They are recorded as business transactions:
+
+```text
+Warehouse
+   └── Inventory Transactions
+
+Wallet
+   └── Financial Transactions
+```
+
+This provides traceability, auditability, and a reliable history of business operations.
+
+### POS Is the Sales Boundary
+
+The POS is the actual sales point and Cash Register.
+
+It connects:
+
+```text
+POS
+├── Branch
+├── Branch Warehouse
+├── Wallet
+├── Active Shift
+├── Salesman
+├── Customer
+└── Orders
+```
+
+This makes the POS the central operational boundary for the retail sales flow.
+
+---
+
+## 16. NEXUS Core Concept
+
+The current NEXUS business model can be summarized as:
+
+```text
+                         NEXUS
+                           │
+              ┌────────────┼────────────┐
+              │            │            │
+           Branches     Warehouses     Wallets
+              │
+              ▼
+           Branch
+        ┌─────┼──────┐
+        │     │      │
+   Warehouse POS   Wallet
+             │
+       ┌─────┼─────┐
+       │     │     │
+    Wallet Shift  Orders
+             │
+          Salesman
+             │
+          Customer
+```
+
+The fundamental retail operation is:
+
+```text
+Salesman
+    │
+    ▼
+   POS
+    │
+    ├── creates Order
+    │
+    ├── uses Branch Warehouse
+    │       └── Inventory OUT
+    │
+    ├── uses POS Wallet
+    │       └── Financial INCOME
+    │
+    └── operates inside a Shift
+```
+
+This model is the current baseline for NEXUS Phase 0 — Planning.
