@@ -55,7 +55,7 @@ NEXUS evolves through several architectural stages:
 
 ## Documentation See: 
 
-- `docs/planning`
+- [Planning](docs/planning/README.md)
 - `docs/architecture`
 - `docs/adr`
 - `docs/rfc`
