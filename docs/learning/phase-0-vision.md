@@ -280,3 +280,238 @@ Current discovered concepts include:
 * Customer Receivable
 
 Online Customer and Online Warehouse are intentionally deferred.
+
+---
+
+## Phase 0.2 — Inventory Discovery
+
+### 1. Domain Discovery Before Implementation
+
+Business Understanding
+→ Business Concepts
+→ Business Rules
+→ Domain Model
+→ Implementation
+
+We do not start with database tables or classes.
+
+### 2. Product Taxonomy
+
+Inventory can be organized through:
+
+Category
+→ Subcategory
+→ Product
+
+### 3. Attribute Inheritance
+
+Category can define Attribute Definitions.
+
+Subcategory inherits and may add.
+
+Product inherits and may add Product-specific Attributes.
+
+### 4. Product vs Variant
+
+A Variant is a concrete configuration of a Product.
+
+Every Product has one automatically-created Primary Variant.
+
+The Primary Variant is a real stock-bearing Variant.
+
+Additional Variants are created only when needed.
+
+### 5. Dynamic Attributes
+
+Current types:
+
+- TEXT
+- NUMBER
+- DATE
+- SELECT
+- MULTI_SELECT
+- BOOLEAN
+
+Any supported type may be Variant-Defining.
+
+### 6. Variant Identity
+
+Variant identity is determined by Variant-Defining Attribute values.
+
+The same complete combination cannot occur twice within one Product.
+
+### 7. Actual Variants Only
+
+NEXUS does not generate all possible combinations.
+
+The User creates only the actual Variants required.
+
+### 8. Stock as Current State
+
+Stock is:
+
+> The current physical quantity of a Product Variant in a Warehouse.
+
+Reserved/Damaged/Expired are not modeled as Stock Details.
+
+### 9. Wastage/Loss
+
+Wastage/Loss is separate from current Stock.
+
+When goods are written off:
+
+- Stock decreases.
+- The reason is recorded separately.
+- The historical event belongs to future Wastage/Loss / Stock Movement modeling.
+
+---
+
+# References — What We Learned From Each
+
+## REF-IND-001 — GS1 Global Data Model
+
+**Source:** GS1 Global Data Model
+
+**What we learned:**
+- Product master data naturally uses Attributes.
+- Product data can contain common/foundational attributes.
+- Attribute modeling is an established product-data concern.
+
+**What we used:**
+- Product Attributes.
+- Attribute Definitions.
+- Category-aware product data.
+
+**What we did NOT take:**
+- GS1's exact hierarchy.
+- GS1's exact attribute catalog.
+- GS1's exact implementation.
+
+---
+
+## REF-IND-002 — GS1 Global Product Classification
+
+**What we learned:**
+- Product classification can be hierarchical.
+- Different categories can have different characteristics.
+
+**What we used:**
+- Category.
+- Subcategory.
+- Category-specific Attribute thinking.
+
+**What remains NEXUS-specific:**
+- Our exact Category/Subcategory structure.
+- Our inheritance behavior.
+
+---
+
+## REF-IND-003 — GS1 Attributes vs Trade Item Attributes
+
+**What we learned:**
+- Classification attributes and actual product attributes are conceptually different.
+
+**What we used:**
+- Separation of Category-level and Product-level Attributes.
+- Attribute inheritance concept.
+
+**NEXUS-specific:**
+- Category → Subcategory → Product additive inheritance.
+
+---
+
+## REF-IND-004 — Google Product Variant Structured Data
+
+**What we learned:**
+- Product Groups can contain Variants.
+- Some properties are common.
+- Some properties determine variation.
+
+**What we used:**
+- Product / Variant distinction.
+- Variant-defining Attributes.
+
+**NEXUS-specific:**
+- Primary Variant.
+- Automatic Primary Variant creation.
+- User-created actual Variants.
+- Variant Stock ownership.
+
+---
+
+## REF-ACAD-001 — Schrady (1970)
+
+**What we learned:**
+- Inventory records should correspond meaningfully to physical inventory.
+- Inventory record accuracy is an operational concern.
+
+**What we used:**
+- Grounding the concept:
+
+`Stock = Current Physical Quantity`
+
+**Not derived from it:**
+- Our exact Stock entity.
+- Our future Stock Movement model.
+
+---
+
+## REF-ACAD-002 — Herrero-Vidal et al. (2024)
+
+**What we learned:**
+- Product variants can be represented through variation attributes.
+
+**What we used:**
+- Product / Variant relationship.
+- Variant-defining characteristics.
+
+**Not derived from it:**
+- Primary Variant.
+- Attribute inheritance.
+- Stock model.
+
+---
+
+## REF-ACAD-003 — Rekik et al. (2025)
+
+**What we learned:**
+- Recorded and physical inventory can diverge.
+- Perishability and stock counting affect inventory accuracy.
+
+**What we used:**
+- Future investigation of Stock Counts.
+- Future investigation of perishability.
+
+**Still Open:**
+- Stock Count.
+- Expiry tracking.
+
+---
+
+## REF-ACAD-004 — Sasanuma et al. (2021)
+
+**What we learned:**
+- Wastage is a meaningful concept distinct from ordinary inventory.
+
+**What we used:**
+- Separation:
+
+Current Stock ≠ Wastage/Loss
+
+**Not derived from it:**
+- Our Wastage workflow.
+- Our Stock Movement taxonomy.
+
+---
+
+# Reference Discipline
+
+For every major future decision:
+
+Reference
+↓
+What we learned
+↓
+What we used
+↓
+What remains NEXUS-specific
