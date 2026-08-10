@@ -171,3 +171,58 @@ It currently includes:
 
 * Takeaway
 * Identified Customer
+
+--- 
+
+## Inventory Terms
+
+### Category
+A business classification level used to organize Products and define reusable Attribute Definitions.
+
+### Subcategory
+An optional child classification of a Category.
+
+### Product
+The business-level product concept.
+
+A Product does not have direct Stock.
+
+### Variant
+A concrete configuration of a Product distinguished by Variant-Defining Attribute values.
+
+> `Variant` is the agreed term. `Alternative` is no longer used.
+
+### Primary Variant
+The automatically-created base Variant of a Product.
+
+### Attribute Definition
+A reusable definition describing a Product characteristic.
+
+### Attribute Value
+The actual value assigned to an Attribute.
+
+### Variant-Defining Attribute
+An Attribute whose value participates in identifying a Variant.
+
+### Stock
+The current physical quantity of a Product Variant in a Warehouse.
+
+### Wastage / Loss
+A separate business event in which Stock is written off or removed for a reason such as damage or expiry.
+
+### Stock Movement
+A future domain concept representing a business change to Stock.
+
+### Stock Details
+Not a current NEXUS domain concept.
+
+Reserved/Damaged/Expired are intentionally not modeled as Stock Details.
+
+## Attribute Types
+
+- TEXT
+- NUMBER
+- DATE
+- SELECT
+- MULTI_SELECT
+- BOOLEAN
