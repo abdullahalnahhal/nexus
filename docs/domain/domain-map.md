@@ -221,3 +221,76 @@ The following relationships are not finalized:
 * Exact relationship between Sale and Stock Transaction.
 * Exact Return relationship to the original Sale.
 * Exact User/Role/Permission model.
+
+---
+## Inventory
+
+Category
+  |
+  +-- Attribute Definitions
+  |
+  +-- Subcategory
+        |
+        +-- inherited Attribute Definitions
+        +-- additional Attribute Definitions
+        |
+        +-- Product
+              |
+              +-- inherited Attribute Definitions
+              +-- Product-specific Attribute Definitions
+              +-- Allowed Attribute Values
+              |
+              +-- Primary Variant
+              |
+              +-- Actual Variants
+                    |
+                    +-- Variant Attribute Values
+                    |
+                    +-- Stock
+                          |
+                          +-- Warehouse
+
+## Product / Variant
+
+Product
+   |
+   +-- Primary Variant
+   |
+   +-- Actual Variant
+   +-- Actual Variant
+   +-- Actual Variant
+
+* The Product itself does not hold direct Stock.
+* The Primary Variant is a real Variant.
+* Additional Variants are created only when actually required.
+
+## Attribute Inheritance
+
+Category
+    ↓
+Subcategory
+    ↓
+Product
+    ↓
+Variant
+
+### Inheritance is additive.
+
+* Category defines the base Attribute set.
+* Subcategory inherits and may add.
+* Product inherits and may add.
+* Variant cannot introduce an Attribute outside Product Attributes.
+
+## Stock
+
+Warehouse
+   |
+   +-- Variant A → Stock
+   +-- Variant B → Stock
+   +-- Variant C → Stock
+
+* Stock represents current physical quantity.
+* Reserved, Damaged, and Expired are not Stock Details.
+* Wastage/Loss is a separate future business concept.
+
+  
