@@ -267,3 +267,22 @@ The initial physical NEXUS domain includes:
 ### Deferred
 
 Online Customer operations and their dedicated Warehouse are intentionally deferred.
+
+## Phase 0.2 — Inventory Discovery Update
+
+The following Inventory concepts were added without removing prior vision content.
+
+- Inventory is organized through Category and optional Subcategory.
+- Category/Subcategory/Product participate in additive Attribute inheritance.
+- Every Product has one automatically-created Primary Variant.
+- The Primary Variant is a real stock-bearing Variant.
+- Additional Variants are created only when actually needed.
+- Variant combinations are not auto-generated.
+- Stock belongs to Product Variants, not directly to Products.
+- Stock is current physical quantity in a Warehouse.
+- Reserved/Damaged/Expired are not modeled as Stock Details in the current domain.
+- Wastage/Loss is separate from the current Stock balance and will be modeled through future movement/loss concepts.
+
+### Current Discovery Boundary
+
+The next Inventory discovery area is Stock Movements. No movement taxonomy has been assumed yet.
