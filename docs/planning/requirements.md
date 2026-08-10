@@ -156,3 +156,60 @@ The following are intentionally unresolved:
 * Exact Wallet transaction model.
 * Exact Shift state machine.
 * Manager assignment rules.
+
+---
+
+## Phase 0.2 — Inventory Requirements
+
+### Product / Variant
+
+- Every Product has exactly one Primary Variant.
+- The Primary Variant is created automatically with the Product.
+- The Primary Variant is a real Variant and can hold Stock.
+- Product has no independent Stock balance.
+- Each Variant has an independent Stock balance.
+- A Variant cannot introduce an Attribute outside the Product Attribute set.
+- Variant identity is based on the complete combination of Variant-Defining Attribute values.
+- Duplicate Variant-defining combinations are not allowed within the same Product.
+- The system does not auto-generate every possible Variant combination.
+- The User creates only the Variants actually needed.
+- The Primary Variant is the base Product representation.
+
+### Attributes
+
+Current Attribute Types:
+
+- TEXT
+- NUMBER
+- DATE
+- SELECT
+- MULTI_SELECT
+- BOOLEAN
+
+Rules:
+
+- Category defines reusable Attribute Definitions.
+- Subcategory inherits and may add Attributes.
+- Product inherits and may add Product-specific Attributes.
+- Variants may only use Product Attributes.
+- Any supported Attribute Type may be Variant-Defining.
+
+### Stock
+
+- Stock is the current physical quantity of a Product Variant in a Warehouse.
+- Stock is not divided into Reserved/Damaged/Expired status buckets.
+- Reserved is explicitly out of the current Inventory model.
+- Damaged/Expired are not Stock Details.
+- Wastage/Loss reduces current Stock.
+- Stock history will be represented through future Stock Movement concepts.
+
+### Additional Open Questions
+
+- What exact Stock Movement types exist?
+- How is Wastage/Loss authorized?
+- Which Wastage reasons are configurable?
+- Are Stock Counts/Adjustments required?
+- What Unit of Measure rules apply?
+- Are Lot/Batch/Expiry attributes required?
+- How will SKU/Barcode work?
+- How do pricing and costing relate to Product vs Variant?
