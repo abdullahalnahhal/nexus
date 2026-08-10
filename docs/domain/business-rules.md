@@ -184,6 +184,138 @@ A completed Return may increase the relevant Branch Warehouse stock.
 
 Online Customer operations are outside the current physical NEXUS scope.
 
+--- 
+
+## Product / Variant
+
+### BR-INV-001 — Product Has a Primary Variant
+
+Every Product must have exactly one Primary Variant.
+
+### BR-INV-002 — Primary Variant Is Created Automatically
+
+The Primary Variant is created automatically when the Product is created.
+
+### BR-INV-003 — Primary Variant Is a Real Variant
+
+The Primary Variant is a real stock-bearing Variant.
+
+### BR-INV-004 — Product Has No Direct Stock
+
+Stock is recorded against Product Variants, never directly against the Product.
+
+### BR-INV-005 — Variant Stock Is Independent
+
+Each Variant has its own Stock balance.
+
+### BR-INV-006 — Adding a Variant Does Not Move Existing Stock
+
+Creating a new Variant does not transfer, merge, or modify another Variant's Stock.
+
+### BR-INV-007 — Primary Stock May Remain
+
+The Primary Variant may continue to hold Stock after additional Variants are created.
+
+### BR-INV-008 — Variant Cannot Add Attributes
+
+A Variant may not introduce an Attribute that is not part of its Product's Attribute set.
+
+### BR-INV-009 — Variant Combination Is Unique
+
+Within a Product, the complete combination of Variant-Defining Attribute values must be unique.
+
+### BR-INV-010 — No Automatic Combination Generation
+
+The system does not generate every mathematically possible Variant combination.
+
+### BR-INV-011 — User Creates Actual Variants
+
+The User creates only the Variants actually required by the business.
+
+### BR-INV-012 — Primary Has No Required Variant-Defining Values
+
+The Primary Variant represents the base Product.
+
+---
+
+## Attribute Rules
+
+### BR-ATTR-001 — Category Defines Base Attributes
+
+A Category may define reusable Attribute Definitions.
+
+### BR-ATTR-002 — Subcategory Inherits
+
+A Subcategory inherits Category Attributes.
+
+### BR-ATTR-003 — Subcategory May Only Add
+
+A Subcategory may add Attributes but may not modify inherited Attribute Definitions.
+
+### BR-ATTR-004 — Product Inherits
+
+A Product inherits the Attribute set resulting from its classification path.
+
+### BR-ATTR-005 — Product May Add
+
+A Product may add Product-specific Attributes.
+
+### BR-ATTR-006 — Lower Levels Cannot Modify Inherited Definitions
+
+Neither Product nor Subcategory may alter the definition of an inherited Attribute.
+
+### BR-ATTR-007 — Supported Attribute Types
+
+TEXT, NUMBER, DATE, SELECT, MULTI_SELECT, BOOLEAN.
+
+### BR-ATTR-008 — Any Type Can Define Variants
+
+Any supported Attribute Type may be marked Variant-Defining.
+
+### BR-ATTR-009 — Product Controls Allowed Values
+
+Where an Attribute uses controlled values, the Product determines permitted values.
+
+### BR-ATTR-010 — Variant Uses Product Values
+
+Variant Attribute values must comply with Product Attribute definitions and constraints.
+
+---
+
+## Stock Rules
+
+### BR-STK-001 — Stock Is Variant-Based
+
+Stock is maintained per Product Variant per Warehouse.
+
+### BR-STK-002 — Stock Is Current Physical Quantity
+
+Stock represents the current physical quantity present in the Warehouse.
+
+### BR-STK-003 — No Stock Status Buckets
+
+Reserved, Damaged, Expired, and similar concepts are not modeled as Stock Detail buckets.
+
+### BR-STK-004 — Wastage Is Separate
+
+When Stock is lost, damaged, expired, or otherwise written off, Stock decreases and the reason is recorded separately as a future Wastage/Loss concept.
+
+### BR-STK-005 — Stock History Is Separate From Current Balance
+
+Future Stock Movement concepts will explain changes that produced the current Stock balance.
+
+---
+
+## Open Rules
+
+- Stock Movement taxonomy.
+- Wastage authorization and reasons.
+- Stock Count / Adjustment reconciliation.
+- Units of Measure.
+- Lot/Batch/Expiry behavior.
+- SKU/Barcode rules.
+- Product/Variant pricing and costing.
+
 ### BR-034 — Online Warehouse Scope
 
 The Online Customer Warehouse is deferred until the physical NEXUS domain is completed.
