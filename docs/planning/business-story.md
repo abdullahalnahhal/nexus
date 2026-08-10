@@ -170,3 +170,20 @@ NEXUS will eventually support Online Customers.
 Online Customers will operate against a dedicated Online Warehouse.
 
 This domain is intentionally deferred until the physical NEXUS domain is completed.
+---
+
+## Phase 0.2 — Inventory Discovery Update
+
+The Inventory story was extended with the following confirmed behavior.
+
+Products are classified through Categories and optional Subcategories. Categories can define reusable Attribute Definitions. Subcategories inherit those definitions and may add new ones. Products inherit the resulting definitions and may add Product-specific Attributes.
+
+A Product automatically receives exactly one Primary Variant. The Primary Variant is a real Variant and can carry stock. Additional Variants are created only when the business actually needs them. The system does not generate all possible combinations of Attribute values.
+
+A Variant uses only Product Attributes. Variant-defining Attribute values identify the Variant, and the same complete combination cannot be duplicated within one Product.
+
+Stock is maintained per Product Variant in a Warehouse. Stock is the current physical quantity. We intentionally removed Reserved, Damaged, and Expired as Stock Detail buckets.
+
+When goods are damaged, expired, or otherwise written off, the quantity is reduced and the reason belongs to a separate future Wastage/Loss or Stock Movement concept.
+
+This section records business discoveries only; implementation details remain open.
