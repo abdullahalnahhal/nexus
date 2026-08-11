@@ -480,3 +480,229 @@ Source
               │
               └── Download - Transfer
 ```
+## Phase 0.2 Inventory Discovery — Checkpoint 0.2-A
+
+> This section extends the existing Domain Map.
+> Previous Domain Map decisions remain preserved.
+
+## Inventory Context
+
+```text
+Product
+   |
+   +-- Variant
+          |
+          +-- Product–Warehouse Setup
+                    |
+                    +-- Current Stock
+                    |
+                    +-- Inventory Movements
+```
+The current Inventory identity is:
+```text
+Product + Warehouse
+```
+The existing Product / Variant model remains valid.
+
+---
+## Product–Warehouse Setup
+```text
+Product
+   |
+   +---- Warehouse
+            |
+            +---- Product–Warehouse Setup
+                       |
+                       +---- Current Stock
+                       |
+                       +---- Inventory Movements
+```
+The Product–Warehouse Setup establishes that the Product is managed within the Warehouse.
+
+The Setup starts with:
+```text
+Current Stock = 0
+```
+unless an Opening Balance subsequently establishes another quantity.
+
+---
+## Inventory Documents
+
+```text
+Business Documents
+       |
+       +-- Sale
+       +-- Purchase
+       +-- Customer Return
+       +-- Supplier Return
+       |
+       +-- Transfer
+       +-- Quantity Adjustment
+       +-- Loss
+       +-- Write-off / Depreciation
+       +-- Opening Balance
+```
+Each is an independent business document.
+
+---
+## Document to Inventory Flow
+### Non-Approval Documents
+
+```text
+Sale / Purchase / Return
+          |
+          ▼
+        Save
+          |
+          ▼
+        Final
+          |
+          ▼
+ Inventory Movement
+          |
+          ▼
+    Current Stock
+```
+---
+### Approval-Controlled Documents
+
+```text 
+Transfer / Adjustment / Loss /
+Write-off / Opening Balance
+          |
+          ▼
+        Save
+          |
+          ▼
+ Pending Approval
+          |
+          ▼
+       Approval
+          |
+          ▼
+ Inventory Movement
+          |
+          ▼
+    Current Stock
+```
+---
+## Inventory Movement
+```text
+Inventory Movement
+   |
+   +-- Product
+   +-- Warehouse
+   +-- Quantity
+   +-- Business Document Reference
+```
+Cost is not part of Inventory Movement.
+
+Cost remains within the relevant Business Document / Invoice.
+
+---
+##Current Stock and Movement History
+
+```text
+
+                    +------------------+
+                    | Inventory        |
+                    | Movement History |
+                    +--------+---------+
+                             |
+                             |
+Business Document -----------+
+                             |
+                             ▼
+                    +------------------+
+                    | Current Stock    |
+                    +------------------+
+```
+Current Stock is the persisted operational state.
+
+Inventory Movements preserve the historical explanation of changes.
+
+---
+## Transfer
+
+```text
+Source Warehouse
+       |
+       | -Q
+       |
+       +-------- Transfer Document --------+
+                                           |
+                                           | Approval
+                                           ▼
+                                    Destination Warehouse
+                                           |
+                                           | +Q
+```
+
+The two Inventory effects are atomic.
+
+There is no In-Transit Inventory concept.
+
+---
+## Product–Warehouse Lifecycle
+
+```text
+Product
+   |
+   ▼
+Added to Warehouse
+   |
+   ▼
+Product–Warehouse Setup
+   |
+   ▼
+Active
+   |
+   +---- Inventory Operations
+   |
+   ▼
+Stock = 0
+   |
+   ▼
+Deactivated
+```
+A Product–Warehouse Setup cannot be deactivated while Stock is greater than zero.
+
+Deactivation is logical.
+
+---
+
+## Authorization
+
+```text
+
+User
+  |
+  ▼
+Permissions
+  |
+  +-- Activate Product in Warehouse
+  +-- Approve Document
+  +-- Edit Final / Approved Document
+  +-- Reconcile Stock
+  +-- Deactivate Product–Warehouse
+```
+
+The Domain Model does not depend on job titles such as Manager.
+
+---
+## Reconciliation
+
+```text
+Current Stock
+      |
+      | discrepancy
+      ▼
+Stock Reconciliation Document
+      |
+      ▼
+Corrective Inventory Movement
+      |
+      ▼
+Current Stock
+```
+The historical Movement trail remains preserved.
