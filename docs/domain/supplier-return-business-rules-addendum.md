@@ -72,7 +72,19 @@ The selected method and actual settled amount must be recorded.
 
 Supporting settlement files/attachments must also be recorded.
 
-## BR-SR-011 — Immediate or Deferred Settlement
+## BR-SR-011 — Settlement Amount Is Independent From Invoice Total
+
+The actual Supplier settlement amount may differ from the Supplier Return Invoice Total Amount.
+
+The Return Invoice Total represents the declared value of the return document; it does not constrain the actual amount subsequently settled by the Supplier.
+
+## BR-SR-012 — Multiple Settlement Records Are Allowed
+
+A Supplier Return may have more than one financial settlement record over its lifecycle.
+
+Each settlement record represents an actual settlement event and records its applicable amount, method, and supporting files.
+
+## BR-SR-013 — Immediate or Deferred Settlement
 
 The Supplier Return Invoice allows the financial settlement timing to be selected as:
 
@@ -81,13 +93,13 @@ The Supplier Return Invoice allows the financial settlement timing to be selecte
 
 Stock is deducted immediately in both cases.
 
-## BR-SR-012 — Deferred Settlement
+## BR-SR-014 — Deferred Settlement
 
 When deferred settlement is selected, the Supplier Return may be issued and stock deducted before the Supplier actually performs the financial settlement.
 
-The later actual settlement must be recorded when it occurs.
+One or more later settlement records may be recorded when the Supplier performs the agreed settlements.
 
-## BR-SR-013 — No Customer Return Settlement Symmetry
+## BR-SR-015 — No Customer Return Settlement Symmetry
 
 Supplier Return settlement rules are independent from Customer Return settlement rules.
 
