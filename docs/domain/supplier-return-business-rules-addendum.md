@@ -84,7 +84,15 @@ A Supplier Return may have more than one financial settlement record over its li
 
 Each settlement record represents an actual settlement event and records its applicable amount, method, and supporting files.
 
-## BR-SR-013 — Immediate or Deferred Settlement
+## BR-SR-013 — Partial Settlement Is Allowed
+
+A Supplier Return may be financially settled partially.
+
+The total of all recorded settlement amounts may remain below the Supplier Return Invoice Total Amount, leaving an outstanding/unsettled amount.
+
+Partial settlement is independent from the inventory effect: stock is still deducted in full according to the issued Supplier Return quantities.
+
+## BR-SR-014 — Immediate or Deferred Settlement
 
 The Supplier Return Invoice allows the financial settlement timing to be selected as:
 
@@ -93,13 +101,13 @@ The Supplier Return Invoice allows the financial settlement timing to be selecte
 
 Stock is deducted immediately in both cases.
 
-## BR-SR-014 — Deferred Settlement
+## BR-SR-015 — Deferred Settlement
 
 When deferred settlement is selected, the Supplier Return may be issued and stock deducted before the Supplier actually performs the financial settlement.
 
-One or more later settlement records may be recorded when the Supplier performs the agreed settlements.
+One or more later settlement records may be recorded when the Supplier performs the agreed settlements, and those settlements may be partial.
 
-## BR-SR-015 — No Customer Return Settlement Symmetry
+## BR-SR-016 — No Customer Return Settlement Symmetry
 
 Supplier Return settlement rules are independent from Customer Return settlement rules.
 
