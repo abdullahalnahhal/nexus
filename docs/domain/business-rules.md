@@ -730,4 +730,16 @@ Final
   ↓
 Inventory Effect
 ```
+For Approval-controlled documents:
 
+```text
+
+Save
+  ↓
+Pending Approval
+  ↓
+Approve
+  ↓
+Inventory Effect
+
+```
