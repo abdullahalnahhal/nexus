@@ -1,62 +1,38 @@
 # NEXUS — Stock Adjustment Business Rules Addendum
 
-> Phase 0.2 Inventory Discovery.
-> Append-only addendum. Existing Business Rules history remains unchanged.
+## Phase 0.2 Inventory Discovery — Checkpoint 0.2-A
 
-## BR-SA-001 — Allowed Cause Required
+> Append-only addendum. Previously established cross-cutting Inventory rules remain in force.
 
-A Stock Adjustment must be justified by an allowed business reason or operation already established by NEXUS inventory discovery.
+### BR-SA-001 — Justified Adjustment
+A Stock Adjustment must be based on an allowed business reason and/or originating reference.
 
-Stock Adjustment is not a general-purpose arbitrary stock increase/decrease mechanism.
+### BR-SA-002 — Manual Creation
+An authorized user may create a Stock Adjustment manually when the selected reason is allowed and the user has the required Permission.
 
-## BR-SA-002 — Manual Adjustment Is Allowed
+### BR-SA-003 — Immediate Inventory Effect
+Issuing a Stock Adjustment updates the affected Stock immediately.
 
-An authorized user may create a Stock Adjustment manually when the selected reason/operation permits a manual adjustment.
+### BR-SA-004 — Repeated Product Lines
+The same Product may appear on more than one line in the same Stock Adjustment. The inventory effect for that Product is based on the aggregate quantity of its lines.
 
-## BR-SA-003 — Permission Is Sufficient
+### BR-SA-005 — Traceability
+Reason and/or originating reference must be retained with the Stock Adjustment to explain the inventory change.
 
-The applicable Permission is sufficient to issue a Stock Adjustment directly.
+### BR-SA-006 — No Attachments Requirement
+Attachments are not required for Stock Adjustment traceability in the current phase.
 
-No additional approval step is required in the current phase.
+### BR-SA-007 — Permission Is Sufficient
+No additional approval step is required for Stock Adjustment. The required Permission is sufficient for direct issuance.
 
-## BR-SA-004 — Traceability Required
+### BR-SA-008 — Issued Adjustment Is Immutable
+An issued Stock Adjustment cannot be edited or cancelled.
 
-The reason and/or originating reference for the Stock Adjustment must be stored in the Stock Adjustment itself.
+### BR-SA-009 — No Accounting Effect
+Stock Adjustment does not create an accounting effect in the current NEXUS scope.
 
-## BR-SA-005 — Immediate Inventory Effect
+### BR-SA-010 — UOM Deferred
+UOM behavior is outside the current Stock Adjustment discovery scope.
 
-Issuing a Stock Adjustment changes inventory immediately.
-
-## BR-SA-006 — Repeated Product Lines Allowed
-
-The same Product may appear more than once in a Stock Adjustment.
-
-The resulting inventory effect accounts for the aggregate quantity of repeated Product lines.
-
-## BR-SA-007 — Attachments Not Required
-
-Attachments are not required for Stock Adjustment issuance in the current phase.
-
-Reason/Reference provides the required traceability.
-
-## BR-SA-008 — No Post-Issue Modification
-
-An issued Stock Adjustment cannot be modified.
-
-## BR-SA-009 — No Post-Issue Cancellation
-
-An issued Stock Adjustment cannot be cancelled.
-
-## BR-SA-010 — No Accounting Effect
-
-Stock Adjustment does not produce an Accounting effect in the current phase.
-
-No General Ledger or Sub-ledger transaction is created by the Stock Adjustment.
-
-## BR-SA-011 — No Independent Reference Number
-
-Stock Adjustment does not require a separate independent Reference Number in the current phase.
-
-## BR-SA-012 — UOM Deferred
-
-UOM rules are outside the current Stock Adjustment discovery scope and are deferred to a later phase.
+### BR-SA-011 — No Dedicated Reference Number Requirement
+No separate reference-number requirement is introduced for Stock Adjustment in the current phase.
