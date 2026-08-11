@@ -664,30 +664,70 @@ The Payment destination is explicitly recorded.
 The destination may be a Supplier-related financial account/company and does not necessarily have to be the same legal/entity record represented by the Supplier Company in the Purchase Invoice.
 
 ---
+## Phase 0.2 Inventory Discovery — Checkpoint 0.2-A
 
-## Open Rules — Updated
+> This section extends the existing Business Rules.
+> Previous rules remain preserved.
+> Where a new discovery decision conflicts with an earlier provisional rule, the new decision explicitly supersedes the earlier rule without deleting historical documentation.
 
-The following remain unresolved and must **not** be assumed:
+---
 
-- Stock Movement taxonomy.
-- Wastage authorization and reasons.
-- Stock Count / Adjustment reconciliation.
-- Units of Measure.
-- Lot/Batch/Expiry behavior.
-- SKU/Barcode rules.
-- Product/Variant pricing and costing.
-- Exact Supplier Balance calculation.
-- Exact Supplier Branch debt allocation behavior.
-- Exact Representative allocation behavior after payment.
-- Multiple-payment behavior against documents.
-- Supplier Return settlement states.
-- Return difference accounting/valuation.
-- Replacement Document workflow.
-- Supplier payment destination/account model.
-- Transfer execution authority after approval.
-- Damage/Miss approval requirements.
-- Stock Count workflow.
-- Units of Measure.
-- Lot/Batch/Expiry behavior.
-- SKU/Barcode rules.
-- Product/Variant pricing and costing.
+## Inventory Business Documents
+
+### BR-STK-023 — Independent Inventory Documents
+
+Each of the following Inventory business operations is represented by an independent business document:
+
+- Sale
+- Purchase
+- Customer Return
+- Supplier Return
+- Transfer
+- Quantity Adjustment
+- Loss
+- Write-off / Depreciation
+- Opening Balance
+
+A Corrective Inventory Movement generated as a consequence of an authorized document modification is not considered a separate business operation.
+
+---
+
+## Document Approval
+
+### BR-STK-024 — Non-Approval Documents
+
+The following documents do not require Approval:
+
+- Sales
+- Purchase
+- Customer Return
+- Supplier Return
+
+Once saved, the document becomes Final and its Inventory Effect is applied.
+
+---
+
+### BR-STK-025 — Approval-Controlled Documents
+
+The following documents require Approval before their Inventory Effect is applied:
+
+- Transfer
+- Quantity Adjustment
+- Loss
+- Write-off / Depreciation
+- Opening Balance
+
+---
+
+### BR-STK-026 — Inventory Effect Timing
+
+For documents that do not require Approval:
+
+```text
+Save
+  ↓
+Final
+  ↓
+Inventory Effect
+```
+
