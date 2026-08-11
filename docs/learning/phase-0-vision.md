@@ -738,17 +738,274 @@ This prevents prematurely coupling two different business processes.
 - Damage / Miss / Manual Edit movements exist.
 - Manual Edit requires Warehouse Manager approval.
 
-### Still Open
+# Phase 0.2 — Inventory Discovery Learning
+## Checkpoint 0.2-A
 
-- Exact Supplier Balance calculation.
-- Exact allocation behavior between Branch and Representative.
-- Payment allocation lifecycle.
-- Supplier Receipt definition.
-- Return settlement model details.
-- Difference between return value and inventory valuation.
-- Replacement workflow.
-- Transfer execution authority.
-- Stock Count.
-- Expiry / Batch / Lot modeling.
-- Units of Measure.
-- Costing / valuation.
+### 19. Business Documents vs Inventory Movements
+
+A major discovery was that a Business Operation and its Inventory Effect are not the same concept.
+
+The business operation is represented by a Business Document.
+
+The resulting quantity change is represented by an Inventory Movement.
+
+Therefore:
+
+```text
+Business Operation
+        ↓
+Business Document
+        ↓
+Inventory Movement
+        ↓
+Current Stock
+```
+This prevents the Inventory domain from becoming responsible for every business process that happens to change Stock.
+
+---
+### 20. Current State vs Historical State
+
+NEXUS requires both:
+
+```text
+Current Stock
+```
+and:
+```text
+Inventory Movement History
+```
+Current Stock provides the operational state.
+
+Inventory Movements explain how that state was produced.
+
+Therefore:
+
+> Current State and Historical Record have different responsibilities.
+
+---
+
+### 21. Quantity vs Cost
+
+Another important discovery was the separation between Inventory and Commercial information.
+
+Inventory Movement:
+
+```text
+Quantity
+```
+Business Document / Invoice:
+```text
+Quantity + Cost Information
+```
+This prevents Inventory from becoming implicitly coupled to costing and financial valuation.
+
+---
+
+### 22. No Reservation Means Simpler Availability
+
+NEXUS currently has no Reserved Stock.
+
+Therefore:
+```text
+Available Stock = Current Stock
+```
+This is an explicit scope decision.
+
+It is not an assumption that reservation can never be introduced later.
+
+---
+
+### 23. Permission Is More Important Than Job Title
+
+A major correction to the earlier domain language was:
+
+"Manager can do X"
+
+is not a sufficiently precise business rule.
+
+The better model is:
+```text
+User
+  ↓
+Permissions
+  ↓
+Business Capabilities
+```
+
+A User may have a Manager role but not have a specific Permission.
+
+Another User may have the Permission without having the Manager title.
+
+Therefore:
+
+> Authorization rules should be expressed in terms of Permissions.
+
+---
+
+### 24. Immutable History Through Corrective Movements
+
+When a Final or Approved document is modified by an authorized User, the original Inventory Movement is not rewritten.
+
+```text
+Instead:
+
+Original Movement
+       +
+Corrective Movement
+       =
+New Effective State
+```
+
+This preserves historical integrity and provides a traceable correction path.
+
+---
+### 25. Product–Warehouse Setup Is a Prerequisite
+
+The existence of a Product does not automatically mean that the Product can move through every Warehouse.
+
+The Product must first be added to the Warehouse.
+
+That action automatically establishes:
+
+```text
+Product + Warehouse
+        ↓
+Product–Warehouse Setup
+        ↓
+Stock Context
+```
+
+This creates a clear boundary between:
+
+* being a Product in the catalog
+* being managed as Inventory in a specific Warehouse
+
+---
+
+### 26. Deactivation Does Not Mean Deletion
+
+A Product–Warehouse Setup may become inactive.
+
+However:
+```text
+Inactive
+```
+does not mean:
+```text
+Deleted
+```
+Historical documents and Inventory Movements remain.
+
+The system records a change of state rather than destroying history.
+
+---
+## 27. Transfer Atomicity
+
+A Transfer is not simply two independent stock updates.
+
+It is one business operation producing two Inventory effects:
+```text
+Source Warehouse      -Q
+Destination Warehouse +Q
+```
+Both must succeed together.
+
+This introduced an important consistency invariant:
+
+> A Transfer cannot be partially executed.
+
+---
+
+## 28. Reconciliation Is a Business Document
+
+When Current Stock needs correction, NEXUS does not directly mutate Stock outside the normal Inventory mechanism.
+
+Instead:
+```text
+
+Stock Reconciliation
+        ↓
+Corrective Movement
+        ↓
+Current Stock
+```
+This preserves the historical explanation of Stock changes.
+
+---
+## 29. Scope Is a Design Decision
+
+The following are intentionally outside the current Inventory model:
+
+* Reserved Stock
+* Batch / Lot tracking
+* Serial Number tracking
+* Expiry tracking
+* Multiple UOM
+* UOM Conversion
+* In-Transit Inventory
+* Cost inside Inventory Movement
+
+These may become future capabilities, but they are not current requirements.
+
+---
+## 30. Discovery Discipline
+
+A new lesson from this checkpoint is the importance of distinguishing:
+```text
+Confirmed Rule
+        vs
+Historical Rule
+        vs
+Superseded Rule
+        vs
+Open Question
+```
+When a new discovery changes an earlier assumption, the old documentation should not be silently erased.
+
+Instead:
+```text
+Previous Decision
+       ↓
+New Discovery
+       ↓
+Explicit Superseding Decision
+```
+This preserves the evolution of the Domain Discovery process.
+
+---
+## 31. Current Inventory Discovery State
+### Confirmed
+* Nine independent Inventory business documents.
+* Permission-based authorization.
+* Final documents for Sales/Purchase/Returns.
+* Approval-controlled documents for Transfer/Adjustment/Loss/Write-off/Opening Balance.
+* No Negative Stock.
+* No Reserved Stock.
+* Product + Warehouse Inventory identity.
+* One Unit of Measure per Product.
+* Quantity-only Inventory Movement.
+* Cost remains in Business Documents / Invoices.
+* Persisted Current Stock.
+* Historical Inventory Movements.
+* Product–Warehouse Setup prerequisite.
+* Automatic Product–Warehouse Setup creation.
+* Logical Deactivation.
+* Zero Stock required before Product–Warehouse Deactivation.
+* Warehouse-to-Warehouse Transfer only.
+* Atomic Transfer.
+* No In-Transit Inventory.
+* Corrective Inventory Movements.
+* Permission-controlled Reconciliation.
+
+---
+##Still Open
+* Customer Return detailed rules.
+* Supplier Return detailed rules.
+* Return references.
+* Partial Returns.
+* Opening Balance recurrence.
+* Quantity Adjustment semantics.
+* Loss vs Write-off / Depreciation distinction.
+* Reconciliation details.
+* Approval Log structure.
+* Exact multi-line validation timing.
