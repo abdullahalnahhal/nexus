@@ -306,7 +306,368 @@ Future Stock Movement concepts will explain changes that produced the current St
 
 ---
 
-## Open Rules
+### BR-034 — Online Warehouse Scope
+
+The Online Customer Warehouse is deferred until the physical NEXUS domain is completed.
+
+---
+
+# NEXUS — Business Rules
+
+## Phase 0.2 Inventory Discovery — Addendum
+
+> This section extends the existing Business Rules.
+> Previous rules remain valid unless explicitly superseded.
+
+---
+
+## Supplier Company & Supplier Branch
+
+### BR-SUP-001 — Supplier Company
+
+A Supplier Company represents a company from which NEXUS purchases goods.
+
+A Supplier Company may have multiple Supplier Branches.
+
+---
+
+### BR-SUP-002 — Supplier Branch
+
+A Supplier Branch represents a specific operational branch/location of a Supplier Company.
+
+A Supplier Branch belongs to exactly one Supplier Company.
+
+---
+
+### BR-SUP-003 — Branch Reference Person
+
+A Supplier Branch has a Reference Person.
+
+The Reference Person is associated with the Supplier Branch, not directly with the Supplier Company.
+
+---
+
+### BR-SUP-004 — Branch Manager
+
+A Supplier Branch has a Manager.
+
+The Manager is associated with the Supplier Branch, not directly with the Supplier Company.
+
+---
+
+### BR-SUP-005 — Branch Representative
+
+A Supplier Branch has Supplier Representative(s).
+
+The Representative is associated with the Supplier Branch, not directly with the Supplier Company.
+
+---
+
+## Supplier Balance
+
+### BR-SUP-006 — Supplier Opening Balance
+
+A Supplier Company may have an Opening Balance when it is introduced into NEXUS.
+
+The Opening Balance contributes to the Supplier Company's actual financial balance.
+
+---
+
+### BR-SUP-007 — Representative Balance Is Attribution
+
+A balance attributed to a Supplier Representative is not an independent financial liability.
+
+It represents a subdivision/attribution of the Supplier Company's total financial liability.
+
+---
+
+### BR-SUP-008 — Representative Collection Is Transferable
+
+A Supplier Representative other than the representative originally associated with an attributed amount may collect the amount.
+
+The attribution does not create an independent financial liability for the Representative.
+
+---
+
+### BR-SUP-009 — Supplier Company Is the Actual Financial Party
+
+The Supplier Company's financial balance represents the actual financial liability.
+
+Branch and Representative balances are operational/attribution views of that liability unless a future rule explicitly establishes otherwise.
+
+---
+
+## Purchase Invoice
+
+### BR-SUP-010 — Purchase Invoice Is Goods Receipt
+
+Purchase Invoice and Goods Receipt represent the same business document in NEXUS.
+
+No separate Goods Receipt document is required.
+
+---
+
+### BR-SUP-011 — Original Invoice Attachment Required
+
+The original Supplier Purchase Invoice image must be attached.
+
+The Purchase Invoice cannot be created without the required original invoice attachment.
+
+---
+
+### BR-SUP-012 — Purchase Invoice Warehouse
+
+A Purchase Invoice identifies the Warehouse receiving the purchased goods.
+
+When the Purchase Invoice is documented/approved according to the applicable workflow, the received quantity increases the selected Warehouse Stock.
+
+---
+
+### BR-STK-006 — Purchase Stock Movement
+
+Purchase receipt increases Stock through:
+
+`[ Download - Buy ]`
+
+Reason:
+
+`Purchase / Goods Receipt`
+
+---
+
+## Warehouse & Sales
+
+### BR-STK-007 — Sales Warehouse
+
+A Sale is fulfilled from the Main Warehouse of the Branch.
+
+---
+
+### BR-STK-008 — Non-Saleable Warehouses
+
+A Secondary Warehouse or a Warehouse not associated with a Branch cannot be used directly for Sales.
+
+---
+
+### BR-STK-009 — Sale Stock Movement
+
+A completed Sale decreases Stock through:
+
+`[ Upload - Sell ]`
+
+---
+
+## Transfer
+
+### BR-STK-010 — Transfer Has Two Initiation Flows
+
+A Transfer may originate from either:
+
+1. Destination Request → Source Approval
+2. Source Order → Destination Approval
+
+---
+
+### BR-STK-011 — Transfer Requires Approval
+
+A Transfer does not become an executed Stock transfer until the required approval flow is completed.
+
+---
+
+### BR-STK-012 — Transfer Out
+
+The Source Warehouse decreases Stock through:
+
+`[ Upload - Transfer ]`
+
+---
+
+### BR-STK-013 — Transfer In
+
+The Destination Warehouse increases Stock through:
+
+`[ Download - Transfer ]`
+
+---
+
+### BR-STK-014 — Destination Warehouse Branch Independence
+
+The Destination Warehouse does not have to belong to a Branch.
+
+---
+
+### BR-STK-015 — No Reserved Quantity
+
+NEXUS does not maintain a Reserved Quantity.
+
+Transfer requests/orders therefore do not create a Reserved Stock bucket.
+
+---
+
+## Damage / Missing
+
+### BR-STK-016 — Damage
+
+Damaged goods decrease Stock through:
+
+`[ Damage ]`
+
+A predefined and stored Damage Reason must be recorded.
+
+---
+
+### BR-STK-017 — Missing
+
+Missing goods decrease Stock through:
+
+`[ Miss ]`
+
+A predefined and stored Missing/Loss Reason must be recorded.
+
+---
+
+## Manual Edit
+
+### BR-STK-018 — Manual Edit
+
+Manual Stock Adjustment is recorded through:
+
+`[ Manual Edit ]`
+
+It may increase or decrease Stock.
+
+---
+
+### BR-STK-019 — Manual Edit Approval
+
+A Manual Edit cannot be approved without Warehouse Manager approval.
+
+---
+
+## Supplier Return
+
+### BR-SUP-013 — Supplier Return Requires a Return Invoice
+
+Returning goods to a Supplier is represented by a Supplier Return Invoice.
+
+It is not merely a reversal of the original Purchase Invoice.
+
+---
+
+### BR-SUP-014 — Supplier Return Value May Differ
+
+The financial value of a Supplier Return may be lower than the original purchase value of the returned goods.
+
+This is particularly relevant to goods such as expired food products.
+
+---
+
+### BR-STK-020 — Supplier Return Stock Movement
+
+A Supplier Return decreases Warehouse Stock through:
+
+`[ Upload - Supplier Returns ]`
+
+---
+
+### BR-SUP-015 — Return Does Not Automatically Reduce Supplier Balance
+
+Creating a Supplier Return does not automatically reduce the Supplier Company's financial balance.
+
+The Supplier Return Invoice determines the financial treatment.
+
+---
+
+### BR-SUP-016 — Return Financial Settlement
+
+The Supplier Return Invoice may determine that the return results in a financial settlement such as:
+
+- Cash received
+- Set-off / Offset against an existing Supplier liability
+
+Exact settlement rules remain under discovery.
+
+---
+
+### BR-SUP-017 — Replacement Is Separate
+
+Supplier replacement is not part of the current Supplier Return flow.
+
+Replacement will be represented later through a separate:
+
+`Replacement Document`
+
+---
+
+## Customer Return
+
+### BR-STK-021 — Customer Return
+
+A Customer Return is represented by a Customer Return Invoice.
+
+---
+
+### BR-STK-022 — Customer Return Stock Movement
+
+A Customer Return increases Warehouse Stock through:
+
+`[ Download - Customer Return ]`
+
+---
+
+## Supplier Payment
+
+### BR-PAY-001 — Supplier Payment Methods
+
+Supplier Payments may be made using:
+
+- Cash
+- Visa
+- Bank Transfer
+- Electronic Wallet
+
+---
+
+### BR-PAY-002 — Non-Cash Evidence
+
+A payment made through a non-cash method requires an image of the payment/transfer evidence.
+
+---
+
+### BR-PAY-003 — Payment Is Independent From One Invoice
+
+A Supplier Payment is not restricted to a single Purchase Invoice.
+
+---
+
+### BR-PAY-004 — Payment Allocation
+
+One Supplier Payment may be allocated across multiple:
+
+- Purchase Invoices
+- Supplier Receipts
+
+---
+
+### BR-PAY-005 — Payment Cannot Exceed Amount Due
+
+A Supplier Payment cannot exceed the amount actually due to the Supplier.
+
+The exact definition of "amount due" remains subject to completion of the Supplier Accounting model.
+
+---
+
+### BR-PAY-006 — Payment Destination
+
+The Payment destination is explicitly recorded.
+
+The destination may be a Supplier-related financial account/company and does not necessarily have to be the same legal/entity record represented by the Supplier Company in the Purchase Invoice.
+
+---
+
+## Open Rules — Updated
+
+The following remain unresolved and must **not** be assumed:
 
 - Stock Movement taxonomy.
 - Wastage authorization and reasons.
@@ -315,7 +676,18 @@ Future Stock Movement concepts will explain changes that produced the current St
 - Lot/Batch/Expiry behavior.
 - SKU/Barcode rules.
 - Product/Variant pricing and costing.
-
-### BR-034 — Online Warehouse Scope
-
-The Online Customer Warehouse is deferred until the physical NEXUS domain is completed.
+- Exact Supplier Balance calculation.
+- Exact Supplier Branch debt allocation behavior.
+- Exact Representative allocation behavior after payment.
+- Multiple-payment behavior against documents.
+- Supplier Return settlement states.
+- Return difference accounting/valuation.
+- Replacement Document workflow.
+- Supplier payment destination/account model.
+- Transfer execution authority after approval.
+- Damage/Miss approval requirements.
+- Stock Count workflow.
+- Units of Measure.
+- Lot/Batch/Expiry behavior.
+- SKU/Barcode rules.
+- Product/Variant pricing and costing.
