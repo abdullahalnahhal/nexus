@@ -743,3 +743,341 @@ Approve
 Inventory Effect
 
 ```
+---
+
+## Final / Approved Documents
+
+### BR-STK-027 — Final Document Immutability
+
+A Final or Approved document cannot normally be modified.
+
+---
+
+### BR-STK-028 — Authorized Modification
+
+A Final or Approved document may be modified only by a User having the required Permission.
+
+---
+
+### BR-STK-029 — Corrective Inventory Movement
+
+When an authorized modification changes the Inventory Effect of an already-effective document:
+
+* The original Inventory Movement remains unchanged.
+* A Corrective Inventory Movement is generated.
+* The resulting Stock is the effect of the original Movement plus the corrective Movement.
+
+Example:
+
+```text
+
+Original Sale = 10
+
+Original Movement = -10
+
+Authorized correction:
+10 → 8
+
+Corrective Movement = +2
+
+Effective Stock Effect = -8
+```
+--- 
+
+### BR-STK-030 — Modification Audit
+
+An authorized modification of a Final or Approved document must be recorded in the Approval Log.
+
+---
+
+## Authorization
+
+## BR-STK-031 — Permission-Based Authorization
+
+NEXUS Business Rules must not depend on hardcoded job titles such as:
+
+* Manager
+* Supervisor
+* Director
+
+Authorization is determined by Permissions.
+
+A role may group Permissions, but the business capability itself is permission-based.
+
+---
+
+## Stock Availability
+### BR-STK-032 — No Negative Stock
+
+NEXUS must never allow Stock to become negative.
+
+Any operation that would reduce the Stock of a Product in a Warehouse below zero must be rejected.
+
+---
+### BR-STK-033 — No Reserved Stock
+
+NEXUS does not maintain Reserved Stock.
+
+There is no separate Reserved Quantity.
+
+Therefore:
+```text
+Available Stock = Current Stock
+```
+---
+## Inventory Identity
+### BR-STK-034 — Product and Warehouse Stock Identity
+
+Inventory Stock is identified by:
+```text
+Product + Warehouse
+```
+Warehouse therefore affects Stock independently.
+
+---
+## BR-STK-035 — Inventory Tracking Scope
+
+The current Inventory model does not track Stock by:
+
+* Batch / Lot
+* Serial Number
+* Expiry Date
+
+These dimensions are outside the current Inventory model.
+
+---
+## Units of Measure
+### BR-STK-036 — Single Product Unit
+
+Each Product has one Unit of Measure.
+
+---
+## BR-STK-037 — Inventory Movement Unit
+
+Every Inventory Movement for a Product uses the Product's Unit of Measure.
+
+NEXUS does not currently support UOM conversion or multiple Units of Measure for the same Product.
+
+---
+## Inventory Movement
+### BR-STK-038 — Quantity-Only Movement
+
+An Inventory Movement carries Quantity information only.
+
+Cost information is not part of the Inventory Movement.
+
+---
+### BR-STK-039 — Cost Belongs to Business Documents
+
+Invoices and business documents carry:
+
+* Quantity
+* Cost information
+
+Inventory Movement carries:
+
+* Quantity
+
+This separation is intentional.
+
+---
+### Current Stock
+## BR-STK-040 — Persisted Current Stock
+
+NEXUS maintains a persisted current Stock quantity for each Product–Warehouse context.
+
+---
+## BR-STK-041 — Inventory Movement History
+
+NEXUS records Inventory Movements as historical records explaining changes to Current Stock.
+
+Current Stock and Inventory Movement History are both maintained.
+
+---
+## Product–Warehouse Setup
+### BR-STK-042 — Product–Warehouse Setup Required
+
+An Inventory Movement cannot be created for a Product in a Warehouse unless a Product–Warehouse Setup exists.
+
+---
+## BR-STK-043 — Automatic Product–Warehouse Setup
+
+When a Product is added to a Warehouse, the Product–Warehouse Setup is created automatically.
+
+The User performing the action must have the required Permission.
+
+---
+BR-STK-044 — Initial Product–Warehouse Quantity
+
+A newly created Product–Warehouse Setup starts with Stock quantity:
+```text
+0
+```
+unless an applicable Opening Balance subsequently changes the quantity.
+
+---
+### Product–Warehouse Deactivation
+## BR-STK-045 — Logical Product–Warehouse Deactivation
+
+A Product–Warehouse Setup may be deactivated.
+
+Deactivation is logical and does not physically delete the Setup or its historical records.
+
+---
+## BR-STK-046 — Zero Stock Required for Deactivation
+
+A Product–Warehouse Setup cannot be deactivated while its current Stock is greater than zero.
+
+The Stock must first be reduced to zero through valid Inventory operations.
+
+Examples include:
+
+* Sale
+* Loss
+* Write-off / Depreciation
+
+---
+### BR-STK-047 — Deactivation Has No Inventory Effect
+
+Deactivation itself does not create an Inventory Movement.
+
+---
+## Logical Deletion
+### BR-STK-048 — Logical Delete
+
+Delete / Deactivate operations in NEXUS are logical state changes.
+
+They do not physically remove historical business data.
+
+---
+## Transfer
+### BR-STK-049 — Internal Warehouse Transfer
+
+A Transfer is strictly:
+
+```text
+Warehouse → Warehouse
+```
+
+A Transfer cannot represent:
+
+* Warehouse → Customer
+* Warehouse → Outside the system
+* Supplier → Warehouse
+* Any other external inventory flow
+
+---
+### BR-STK-050 — Transfer Approval
+
+A Transfer requires Approval before it affects Inventory.
+
+---
+### BR-STK-051 — Transfer Immediate Effect
+
+Upon successful Approval, the Transfer immediately affects both Warehouses.
+```text
+Source Warehouse      -Q
+Destination Warehouse +Q
+```
+---
+### BR-STK-052 — Transfer Atomicity
+
+A Transfer is atomic.
+
+Either:
+```text
+Source -Q
+Destination +Q
+```
+happens completely,
+
+or:
+```text
+Source unchanged
+Destination unchanged
+```
+No partially executed Transfer is allowed.
+
+---
+### BR-STK-053 — No In-Transit Inventory
+
+NEXUS does not currently model In-Transit Inventory.
+
+---
+## Stock Reconciliation
+### BR-STK-054 — Stock Reconciliation Document
+
+Stock Reconciliation / Adjustment is represented by an independent business document.
+
+---
+
+## BR-STK-055 — Permission-Controlled Reconciliation
+
+Stock Reconciliation is available only to Users having the required Permission.
+
+---
+## BR-STK-056 — Reconciliation Uses Inventory Movement
+
+A Stock Reconciliation correction must be represented through an Inventory Movement.
+
+The reconciliation mechanism must not bypass the Inventory Movement history.
+
+---
+## Document Attachments
+### BR-DOC-001 — Attachment Requirement Configuration
+
+Document Types may have configuration determining whether attachments are required.
+
+The currently confirmed states are:
+
+* Required
+* Not Required
+
+No additional attachment state is currently confirmed.
+
+---
+
+## Superseding Decisions
+### BR-STK-057 — Transfer Approval Flow Superseded
+
+The earlier provisional rule:
+```text
+Destination Request → Source Approval
+
+OR
+
+Source Order → Destination Approval
+```
+
+is preserved in the historical documentation but is superseded by the current discovery decision:
+
+> A Transfer is an independent document requiring Approval, and upon Approval its Source and Destination Stock are affected atomically.
+  The exact initiation-direction workflow is therefore no longer treated as a confirmed Business Rule.
+
+---
+### BR-STK-058 — Manual Edit Authorization Superseded
+
+The earlier wording that specifically required:
+
+> Warehouse Manager approval
+
+is superseded by the current authorization principle:
+
+> The required capability is determined by Permission, not by the User's job title.
+
+---
+## Open Rules — Checkpoint 0.2-A
+
+The following remain unresolved:
+
+Exact Customer Return rules.
+Exact Supplier Return rules.
+Whether Returns require reference to an original document.
+Partial Return behavior.
+Opening Balance recurrence rules.
+Exact Quantity Adjustment semantics.
+Adjustment reason requirements.
+Exact distinction between Loss and Write-off / Depreciation.
+Detailed Stock Reconciliation behavior.
+Approval Log structure and required fields.
+Exact validation timing for multi-line documents.
