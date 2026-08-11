@@ -213,3 +213,142 @@ Rules:
 - Are Lot/Batch/Expiry attributes required?
 - How will SKU/Barcode work?
 - How do pricing and costing relate to Product vs Variant?
+
+## Phase 0.2 — Inventory Requirements
+### Checkpoint 0.2-A
+
+> This section extends the existing Inventory requirements.
+> Previous requirements remain preserved.
+
+### Inventory Business Documents
+
+The system shall provide an independent document for each of the following operations:
+
+- Sale
+- Purchase
+- Customer Return
+- Supplier Return
+- Transfer
+- Quantity Adjustment
+- Loss
+- Write-off / Depreciation
+- Opening Balance
+
+---
+
+### Approval Requirements
+
+Approval is required for:
+
+- Transfer
+- Quantity Adjustment
+- Loss
+- Write-off / Depreciation
+- Opening Balance
+
+Approval is not required for:
+
+- Sale
+- Purchase
+- Customer Return
+- Supplier Return
+
+---
+
+### Finalization
+
+Sales, Purchase, Customer Return, and Supplier Return become Final when saved.
+
+Approval-controlled documents become effective after Approval.
+
+---
+
+### Inventory Integrity
+
+The system shall:
+
+- Prevent Negative Stock.
+- Maintain Current Stock.
+- Record Inventory Movements.
+- Preserve original Inventory Movements.
+- Generate Corrective Inventory Movements for authorized changes to effective documents.
+- Prevent Inventory Movement before Product–Warehouse Setup exists.
+
+---
+
+### Stock Model
+
+The current Inventory model shall:
+
+- Identify Stock by Product + Warehouse.
+- Maintain one Unit of Measure per Product.
+- Use the same Unit for Inventory Movements.
+- Not maintain Reserved Stock.
+- Not track Batch / Lot.
+- Not track Serial Number.
+- Not track Expiry Date.
+- Store Quantity in Inventory Movement.
+- Keep Cost information in Business Documents / Invoices.
+
+---
+
+### Product–Warehouse Setup
+
+The system shall:
+
+- Create Product–Warehouse Setup automatically when a Product is added to a Warehouse.
+- Require the appropriate Permission for the action.
+- Start the Setup with zero Stock.
+- Prevent Inventory Movement if the Setup does not exist.
+- Allow logical Deactivation.
+- Prevent Deactivation while Stock is greater than zero.
+
+---
+
+### Transfer
+
+The system shall:
+
+- Allow Transfer only between Warehouses.
+- Require Approval.
+- Apply Source and Destination effects immediately after successful Approval.
+- Apply both effects atomically.
+- Reject partial execution.
+- Not create In-Transit Inventory.
+
+---
+
+### Reconciliation
+
+The system shall provide an independent Stock Reconciliation / Adjustment Document.
+
+Access to Reconciliation shall depend on Permissions.
+
+Reconciliation corrections shall be represented through Inventory Movements.
+
+---
+
+### Document Attachments
+
+Document Types may configure whether attachments are:
+
+- Required
+- Not Required
+
+---
+
+## Updated Open Requirements
+
+The following remain unresolved:
+
+- Exact Customer Return workflow.
+- Exact Supplier Return workflow.
+- Original-document reference requirements for Returns.
+- Partial Return behavior.
+- Opening Balance recurrence.
+- Quantity Adjustment semantics.
+- Adjustment reason requirements.
+- Loss vs Write-off / Depreciation distinction.
+- Detailed Stock Reconciliation workflow.
+- Approval Log structure.
+- Exact validation timing for multi-line documents.
