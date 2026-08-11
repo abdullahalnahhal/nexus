@@ -385,3 +385,112 @@ It requires Warehouse Manager approval before it becomes effective.
 A subdivision of the Supplier Company's actual financial liability among operational dimensions such as Supplier Branch or Representative.
 
 Debt attribution does not create an independent liability.
+
+## New Terms — Phase 0.2 Inventory Discovery Checkpoint 0.2-A
+
+### Inventory Business Document
+
+An independent business document representing one of the defined Inventory business operations.
+
+Current operations:
+
+- Sale
+- Purchase
+- Customer Return
+- Supplier Return
+- Transfer
+- Quantity Adjustment
+- Loss
+- Write-off / Depreciation
+- Opening Balance
+
+---
+
+### Product–Warehouse Setup
+
+The logical setup that establishes that a Product is managed within a specific Warehouse.
+
+It is created automatically when the Product is added to the Warehouse.
+
+A Product–Warehouse Setup starts with zero Stock unless an Opening Balance subsequently changes the quantity.
+
+---
+
+### Current Stock
+
+The persisted current physical quantity of a Product in a Warehouse.
+
+Current Stock represents the operational state of Inventory.
+
+---
+
+### Inventory Movement
+
+A historical record representing a quantity change affecting a Product within a Warehouse.
+
+Inventory Movement carries Quantity information.
+
+Cost is not part of the Inventory Movement.
+
+---
+
+### Corrective Inventory Movement
+
+An additional Inventory Movement generated when an authorized modification changes the Inventory Effect of an already-effective document.
+
+The original Inventory Movement remains unchanged.
+
+---
+
+### Stock Reservation
+
+A quantity separated from Current Stock and reserved for a future operation.
+
+Stock Reservation is not supported in the current NEXUS Inventory model.
+
+---
+
+### Stock Reconciliation
+
+An independent document used to reconcile or correct Current Stock.
+
+Stock Reconciliation is permission-controlled and produces Inventory Movement effects.
+
+---
+
+### Transfer
+
+An internal Inventory operation moving Stock between two Warehouses.
+
+```text
+Warehouse → Warehouse
+```
+A Transfer does not represent an external Inventory flow.
+
+---
+## Final
+
+The state reached by Sales, Purchase, Customer Return, and Supplier Return documents after Save.
+
+A Final document has its Inventory Effect applied and is not normally editable.
+
+---
+## Approved
+
+The state reached by an Approval-controlled Inventory document after the required Permission-based Approval.
+
+An Approved document has its Inventory Effect applied.
+
+---
+## Logical Deactivation
+
+A state change indicating that an entity is no longer active without physically deleting its historical data.
+
+---
+
+## Permission
+
+An authorization capability that determines whether a User can perform a specific business action.
+
+NEXUS does not use job titles as direct authorization rules.
+
