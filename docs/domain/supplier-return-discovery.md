@@ -125,6 +125,12 @@ The selected settlement method and the amount actually settled must be recorded.
 
 Supporting settlement files/attachments must also be recorded.
 
+The actual settlement amount **may differ from the Supplier Return Invoice Total Amount**.
+
+A Supplier Return may have **more than one financial settlement record** over its lifecycle.
+
+The Supplier Return Invoice amount therefore represents the return document's declared total; it is not a hard constraint on the amount(s) subsequently settled by the Supplier.
+
 ## 12. Settlement Timing
 
 The Supplier Return Invoice supports both settlement timings:
@@ -133,9 +139,13 @@ The Supplier Return Invoice supports both settlement timings:
 
 The financial refund/settlement is recorded as part of issuing the Supplier Return.
 
+Immediate settlement does not require the settlement amount to equal the Supplier Return Invoice Total Amount.
+
 ### Deferred Settlement
 
 The Supplier Return is issued first and the inventory is reduced immediately, while the financial refund/settlement is recorded later when the Supplier actually performs the agreed settlement.
+
+Deferred settlement may result in one or more later settlement records.
 
 The choice between Immediate and Deferred Settlement is available on the Supplier Return Invoice itself.
 
@@ -172,14 +182,13 @@ Create Supplier Return Invoice
                 |      |
                 |      +--> Issue Return
                 |      +--> Deduct Stock Immediately
-                |      +--> Record Settlement
+                |      +--> Record zero, one, or more applicable settlement records
                 |
                 +--> Deferred
                        |
                        +--> Issue Return
                        +--> Deduct Stock Immediately
-                       +--> Record Pending/Unsettled state as applicable
-                       +--> Later record actual Supplier Settlement
+                       +--> Later record one or more actual Supplier Settlement records
 ```
 
 ## 15. Explicitly Decided Constraints
@@ -199,16 +208,16 @@ The Supplier Return:
 - Deducts stock immediately on issuance.
 - May contain the same Product on multiple lines; stock deduction uses the aggregate quantity.
 - Supports immediate or deferred financial settlement.
+- Supports multiple financial settlement records over the Supplier Return lifecycle.
+- Does not require settlement amount(s) to equal the Supplier Return Invoice Total Amount.
 - Supports supplier-defined settlement methods, which must be recorded with supporting files.
 
 ## 16. Still Open — Points Not Yet Decided
 
 The following are intentionally not assumed by this document:
 
-- Whether the financial settlement amount must equal the Supplier Return Invoice Total Amount, or may differ when the Supplier settles a different agreed amount.
-- Whether one Supplier Return may have multiple later financial settlement records.
+- Whether a Supplier Return may be partially financially settled at any point in time, and what constitutes a fully settled Return.
 - Whether a deferred settlement has a dedicated status/lifecycle before the actual settlement is recorded.
-- Whether a Supplier Return may be partially financially settled.
 - The exact supported list and configuration model for settlement methods.
 - The exact accounting treatment of Supplier Return and Supplier settlement.
 - Whether a Supplier Return can be corrected after issuance, since stock is already affected immediately.
