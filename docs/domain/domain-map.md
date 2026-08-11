@@ -293,4 +293,190 @@ Warehouse
 * Reserved, Damaged, and Expired are not Stock Details.
 * Wastage/Loss is a separate future business concept.
 
-  
+---
+
+# NEXUS — Domain Map
+
+## Phase 0.2 Inventory Discovery — Addendum
+
+```text
+NEXUS
+│
+├── Supplier Company
+│   │
+│   ├── Opening Balance
+│   │
+│   └── Supplier Branch
+│       ├── Reference Person
+│       ├── Manager
+│       └── Representative(s)
+│
+├── Branch
+│   │
+│   └── Warehouse
+│       ├── Main Warehouse
+│       └── Secondary Warehouse
+│
+├── Purchase Invoice
+│   ├── Supplier Company
+│   ├── Supplier Branch
+│   ├── Warehouse
+│   ├── Items
+│   ├── Paid Amount
+│   ├── Remaining Amount
+│   └── Original Invoice Attachment
+│
+├── Supplier Return Invoice
+│   ├── Supplier
+│   ├── Returned Items
+│   ├── Return Value
+│   ├── Original Return Invoice Attachment
+│   └── Financial Settlement
+│
+├── Supplier Payment
+│   ├── Amount
+│   ├── Payment Method
+│   ├── Payment Destination
+│   ├── Evidence
+│   └── Allocations
+│       ├── Purchase Invoice
+│       └── Supplier Receipt
+│
+└── Inventory
+    │
+    ├── Warehouse
+    │
+    ├── Stock
+    │
+    └── Stock Movements
+        ├── Download - Buy
+        ├── Upload - Sell
+        ├── Upload - Transfer
+        ├── Download - Transfer
+        ├── Upload - Supplier Returns
+        ├── Download - Customer Return
+        ├── Damage
+        ├── Miss
+        └── Manual Edit
+```
+
+---
+
+## Supplier Relationship
+
+```text
+
+Supplier Company
+       │
+       ├── Branch A
+       │     ├── Reference Person
+       │     ├── Manager
+       │     └── Representative(s)
+       │
+       └── Branch B
+             ├── Reference Person
+             ├── Manager
+             └── Representative(s)
+```
+----
+
+## Important distinction
+
+```text
+
+Supplier Company
+      │
+      ▼
+Actual Financial Liability
+
+```
+
+versus:
+
+```text
+Supplier Branch
+      │
+      ▼
+Representative
+      │
+      ▼
+Debt Attribution
+
+```
+
+Representative/Branch attribution is not an independent financial liability.
+
+----
+
+## Purchase Flow
+
+```text
+
+Purchase Invoice
+      │
+      ├── Financial Effect
+      │
+      └── Inventory Effect
+              │
+              ▼
+       Download - Buy
+              │
+              ▼
+           Stock ↑
+```
+
+---
+
+## Supplier Return Flow
+
+```text
+
+Supplier Return Invoice
+      │
+      ├── Inventory Effect
+      │       │
+      │       ▼
+      │ Upload - Supplier Returns
+      │       │
+      │       ▼
+      │    Stock ↓
+      │
+      └── Financial Settlement
+              │
+              ├── Cash
+              └── Offset
+```
+The financial effect is determined by the Return Invoice and is not automatically inferred from the Stock movement.
+
+---
+
+## Transfer
+```text
+Destination Request
+       │
+       ▼
+Source Approval
+       │
+       ▼
+Transfer Execution
+
+OR
+
+Source Order
+       │
+       ▼
+Destination Approval
+       │
+       ▼
+Transfer Execution
+```
+Execution produces two Stock movements:
+```text
+Source
+  │
+  └── Upload - Transfer
+              ↓
+         Destination
+              │
+              └── Download - Transfer
+```
