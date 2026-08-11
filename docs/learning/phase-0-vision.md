@@ -515,3 +515,240 @@ What we learned
 What we used
 ↓
 What remains NEXUS-specific
+
+---
+
+## Phase 0.2 — New Learning: Supply Chain & Inventory Discovery
+
+### 10. Inventory Is Not an Isolated Domain
+
+A major discovery was that Inventory cannot be modeled independently from the business processes that cause Stock to change.
+
+The discovery path became:
+
+Supply Chain
+      ↓
+Supplier
+      ↓
+Purchase
+      ↓
+Warehouse
+      ↓
+Stock
+      ↓
+Stock Movement
+
+This showed that Stock is a **current state**, while the business processes explain how that state changes.
+
+---
+
+## 11. Financial Effect ≠ Inventory Effect
+
+A major discovery from Supplier Returns:
+
+A Stock movement and its financial consequence do not necessarily have the same value.
+
+Example:
+
+Original Purchase Value = 2,000
+Supplier Return Value   = 1,200
+
+The Stock movement is based on the returned quantity.
+
+The financial settlement is determined separately by the Supplier Return Invoice.
+
+Therefore:
+
+> **Do not automatically derive financial consequences from inventory quantity movements.**
+
+---
+
+## 12. Document vs Transaction
+
+NEXUS exposed an important distinction:
+
+Business Document
+        ↓
+defines what happened
+
+versus:
+
+Financial Transaction
+        ↓
+records movement of money
+
+For example:
+
+Purchase Invoice
+Supplier Return Invoice
+        │
+        ▼
+Financial consequences
+
+while:
+
+Supplier Payment
+        │
+        ▼
+Actual financial transaction
+
+A Payment can then be allocated to multiple documents.
+
+---
+
+## 13. Attribution Is Not Ownership
+
+Supplier Representative balances revealed another important domain-modeling lesson.
+
+A Representative can have an attributed amount without actually owning an independent financial balance.
+
+Supplier Company
+      │
+      └── Actual Debt
+             │
+             ├── Branch Attribution
+             └── Representative Attribution
+
+This prevents accidentally modeling every visible balance as a separate financial liability.
+
+---
+
+## 14. Stock Movement as a Historical Explanation
+
+Current Stock:
+
+Stock = Current Physical Quantity
+
+Historical movements:
+
+Purchase
+Sale
+Transfer
+Damage
+Missing
+Return
+Manual Edit
+
+Therefore:
+
+Current State
+     +
+Historical Business Events
+
+are separate concepts.
+
+---
+
+## 15. Transfer Is a Workflow, Not Just a Quantity Change
+
+A Transfer initially looks like:
+
+Warehouse A → Warehouse B
+
+Domain discovery showed that there are actually two possible initiation workflows:
+
+Destination Request
+       ↓
+Source Approval
+
+or:
+
+Source Order
+       ↓
+Destination Approval
+
+Only after the appropriate approval does the inventory movement execute.
+
+This is an example of discovering **business workflow before modeling persistence**.
+
+---
+
+## 16. Return Is Not Always Reversal
+
+A Supplier Return cannot simply be modeled as:
+
+Purchase
+   ↓
+Reverse Purchase
+
+because:
+
+- Return value may differ from purchase value.
+- The financial settlement may be cash.
+- The financial settlement may be an offset.
+- Replacement is a separate business document.
+
+Therefore:
+
+> **Return is its own business document and process.**
+
+---
+
+## 17. Replacement Is a Separate Concept
+
+Replacement was identified but intentionally deferred.
+
+Current decision:
+
+Supplier Return
+        ≠
+Replacement
+
+Supplier Return uses:
+
+Supplier Return Invoice
+
+Replacement will later use:
+
+Replacement Document
+
+This prevents prematurely coupling two different business processes.
+
+---
+
+## 18. Current Phase 0.2 Discovery State
+
+### Confirmed
+
+- Product → Variant → Stock
+- Stock is Variant-based.
+- Stock is Warehouse-specific.
+- No Stock Details concept.
+- No Reserved Quantity.
+- Supplier Company.
+- Supplier Branch.
+- Branch Reference Person.
+- Branch Manager.
+- Branch Representative.
+- Supplier Opening Balance.
+- Purchase Invoice = Goods Receipt.
+- Mandatory original Purchase Invoice attachment.
+- Supplier Return Invoice.
+- Supplier Return can have a value different from original purchase value.
+- Supplier Return affects Stock through `Upload - Supplier Returns`.
+- Return financial treatment is determined by the Return Invoice.
+- Replacement is deferred.
+- Supplier Payments support Cash, Visa, Bank Transfer, Electronic Wallet.
+- Non-cash payment requires evidence.
+- Payment can be allocated across multiple Purchase Invoices / Supplier Receipts.
+- Payment cannot exceed amount due.
+- Transfer has two approval directions.
+- Destination Warehouse does not need Branch ownership.
+- Sales use the Branch Main Warehouse.
+- Damage / Miss / Manual Edit movements exist.
+- Manual Edit requires Warehouse Manager approval.
+
+### Still Open
+
+- Exact Supplier Balance calculation.
+- Exact allocation behavior between Branch and Representative.
+- Payment allocation lifecycle.
+- Supplier Receipt definition.
+- Return settlement model details.
+- Difference between return value and inventory valuation.
+- Replacement workflow.
+- Transfer execution authority.
+- Stock Count.
+- Expiry / Batch / Lot modeling.
+- Units of Measure.
+- Costing / valuation.
