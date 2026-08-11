@@ -243,3 +243,166 @@ Understanding Wastage/Loss as a concept separate from ordinary inventory availab
 | No Stock Details | NEXUS Decision | Business |
 | Wastage/Loss | ACAD-004 + NEXUS Decision | Background + Business |
 | Stock Movement | Open Question | Not decided |
+
+---
+
+## Phase 0.2 Reference Update
+
+In the current phase, NEXUS must distinguish between:
+
+1. What was learned from external references.
+2. What was decided as a NEXUS Business Rule.
+
+The external references provide concepts, principles, and industry knowledge.
+
+They do not dictate the exact business behavior of NEXUS.
+
+---
+
+## Reference → Learning → NEXUS Decision
+
+| Reference / Concept | What We Learned | NEXUS Use |
+|---|---|---|
+| Domain-Driven Design — Eric Evans | Business concepts and behavior should drive the model | Supplier / Purchase / Return / Payment are modeled as business concepts |
+| Event Storming — Alberto Brandolini | Business events and workflows help reveal domain behavior | Transfer approval flows and Stock Movements |
+| Requirements Engineering — Sommerville | Requirements should be explicitly modeled and traced | Business Rules IDs and Open Rules |
+| Inventory Record Accuracy research | Recorded inventory must be considered against physical inventory | Stock represents current physical quantity |
+| Perishable Inventory research | Perishable goods create distinct inventory/wastage concerns | Supports future expiry/wastage discovery |
+| GS1 Product Data references | Product data and attributes are structured business information | Existing Product / Attribute discovery |
+| Product Variant research | Variants can be distinguished by variation attributes | Existing Variant model |
+
+---
+
+## Important Classification
+
+Reference
+    ↓
+What we learned
+    ↓
+NEXUS interpretation
+    ↓
+NEXUS Business Decision
+
+We must not write:
+
+> "The reference says NEXUS must behave this way."
+
+Instead:
+
+> "The reference gave us a concept or principle; NEXUS business discovery determined the specific rule."
+
+---
+
+## Phase 0.2 Discovery Traceability
+
+### Supplier Domain
+
+External knowledge helped establish the distinction between:
+
+- Supplier organization
+- Supplier location/branch
+- Operational contacts
+- Financial relationship
+
+NEXUS-specific discovery then determined:
+
+- Reference Person belongs to Supplier Branch.
+- Manager belongs to Supplier Branch.
+- Representative belongs to Supplier Branch.
+- Supplier Company owns the actual financial liability.
+- Representative balances are attribution, not independent liabilities.
+
+---
+
+### Purchase
+
+External domain modeling principles support treating the purchase process as a business transaction.
+
+NEXUS discovery determined:
+
+- Purchase Invoice = Goods Receipt.
+- Original supplier invoice attachment is mandatory.
+- The receiving Warehouse is explicitly selected.
+- Purchase receipt produces `Download - Buy`.
+
+---
+
+### Supplier Return
+
+External inventory/accounting concepts establish that returning goods can have financial and physical consequences.
+
+NEXUS discovery determined:
+
+- Supplier Return is represented by a Return Invoice.
+- Return value may differ from original purchase value.
+- Return does not automatically reduce Supplier Balance.
+- The Return Invoice determines the financial settlement.
+- Replacement is a separate future document.
+
+---
+
+### Supplier Payment
+
+External financial transaction principles support separating a payment from invoice allocation.
+
+NEXUS discovery determined:
+
+- One Payment can cover multiple Purchase Invoices.
+- One Payment can cover multiple Supplier Receipts.
+- Payment cannot exceed amount due.
+- Payment methods include Cash, Visa, Bank Transfer, and Electronic Wallet.
+- Non-cash payments require evidence.
+- Payment destination is explicitly recorded.
+
+---
+
+## Documentation Rule
+
+Every future reference should answer:
+
+### What did we learn?
+
+Then:
+
+### How did that influence NEXUS?
+
+And finally:
+
+### What exact NEXUS rule resulted?
+
+This prevents external references from being incorrectly presented as requirements.
+
+---
+
+## Current Source Classification
+
+### External Sources
+
+Used to support:
+
+- Domain Modeling
+- Event Discovery
+- Requirements Engineering
+- Inventory Concepts
+- Product Modeling
+- Supply Chain Concepts
+
+### NEXUS Business Discovery
+
+Used to define:
+
+- Supplier structure
+- Warehouse rules
+- Purchase behavior
+- Stock movements
+- Transfer approval flows
+- Payment allocation
+- Supplier Return behavior
+- Representative attribution
+- Business-specific terminology
+
+---
+
+## Principle
+
+> **References inform the model; Business Discovery defines the NEXUS behavior.**
