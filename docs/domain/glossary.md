@@ -226,3 +226,146 @@ Reserved/Damaged/Expired are intentionally not modeled as Stock Details.
 - SELECT
 - MULTI_SELECT
 - BOOLEAN
+---
+
+## New Terms — Phase 0.2
+
+### Supplier Company
+
+The company from which NEXUS purchases goods.
+
+A Supplier Company may have multiple Supplier Branches and has the actual financial liability relationship with NEXUS.
+
+---
+
+### Supplier Branch
+
+A specific operational branch of a Supplier Company.
+
+The Supplier Branch owns its:
+
+- Reference Person
+- Manager
+- Representative(s)
+
+---
+
+### Supplier Representative
+
+A representative associated with a Supplier Branch.
+
+A Representative may be attributed a portion of the Supplier Company's outstanding amount.
+
+The attributed amount is not an independent financial liability.
+
+---
+
+### Supplier Opening Balance
+
+The financial balance existing for a Supplier Company when it is introduced into NEXUS.
+
+---
+
+### Purchase Invoice
+
+The NEXUS document representing both the purchase transaction and the receipt of the purchased goods.
+
+Purchase Invoice and Goods Receipt are the same business document in NEXUS.
+
+---
+
+### Supplier Return Invoice
+
+A financial and inventory document used when goods are returned to a Supplier.
+
+Its return value does not necessarily equal the original purchase value.
+
+---
+
+### Supplier Return Settlement
+
+The financial treatment specified by a Supplier Return Invoice.
+
+Current discovered examples include:
+
+- Cash received
+- Set-off / Offset
+
+---
+
+### Replacement Document
+
+A separate document representing the replacement of returned goods with new goods.
+
+Replacement is intentionally outside the current Supplier Return scope.
+
+---
+
+### Supplier Payment
+
+A financial transaction used to pay a Supplier-related financial obligation.
+
+A Supplier Payment can be allocated across multiple Purchase Invoices or Supplier Receipts.
+
+---
+
+### Payment Allocation
+
+The portion of a Supplier Payment assigned to a specific financial document.
+
+---
+
+### Payment Destination
+
+The financial destination receiving a Supplier Payment.
+
+It may represent a Supplier-related account/company and does not necessarily equal the Supplier Company record used on the Purchase Invoice.
+
+---
+
+### Supplier Receipt
+
+A Supplier-related financial document that may receive an allocation from a Supplier Payment.
+
+The exact business definition and lifecycle remain under discovery.
+
+---
+
+### Main Warehouse
+
+The Warehouse from which Branch Sales are performed.
+
+---
+
+### Secondary Warehouse
+
+A Warehouse that is not the Main Warehouse of a Branch.
+
+Secondary Warehouses cannot be used directly for Sales.
+
+---
+
+### Independent Warehouse
+
+A Warehouse that is not required to belong to a Branch.
+
+An Independent Warehouse may participate in Inventory operations such as Transfers.
+
+---
+
+### Stock Movement
+
+A historical business event explaining a change in Stock.
+
+Current discovered movement names:
+
+```text
+Download - Buy
+Upload - Sell
+Upload - Transfer
+Download - Transfer
+Upload - Supplier Returns
+Download - Customer Return
+Damage
+Miss
+Manual Edit
