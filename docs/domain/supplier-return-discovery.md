@@ -84,15 +84,31 @@ The Supplier Return reduces stock **immediately when the Supplier Return Invoice
 
 Financial settlement timing does not delay the inventory effect.
 
+## 10. Immediate Supplier Account Effect
+
+Issuing a Supplier Return also **immediately adjusts the Supplier's account balance**.
+
+This account effect is independent of whether the Supplier has an existing payable balance at the time of the return.
+
+If the return value exceeds the amount currently owed to the Supplier, the resulting balance may move beyond zero so that the Supplier becomes **a debtor to NEXUS**.
+
+Conceptually:
+
 ```text
-Issue Supplier Return
+Supplier Return Issued
         |
         +--> Stock deducted immediately
         |
-        +--> Financial settlement: immediate OR deferred
+        +--> Supplier Account adjusted immediately
+                    |
+                    +--> Supplier Payable reduced
+                    |
+                    +--> or Supplier becomes a debtor to NEXUS
 ```
 
-## 10. Repeated Product Lines
+The financial settlement/payment that happens afterward is a separate event from the Supplier Return's immediate account effect.
+
+## 11. Repeated Product Lines
 
 A Supplier Return may contain the same Product more than once.
 
@@ -110,56 +126,55 @@ Total stock deduction = 5
 
 The aggregate quantity must still be within the available stock of the selected Warehouse.
 
-## 11. Financial Refund / Settlement
+## 12. Financial Settlement / Account Settlement
 
-The financial return from the Supplier is not constrained to one fixed settlement method.
+The Supplier Return itself changes the Supplier account when it is issued. Subsequent payments or settlements are used to settle the resulting Supplier account balance according to the actual financial relationship between NEXUS and the Supplier.
 
-The Supplier determines the agreed refund/settlement form. Examples include:
+The settlement is not the event that creates the Supplier Return's financial effect.
 
-- Reduction of the amount owed to the Supplier.
+Settlement may occur through different methods according to the agreed transaction, including:
+
+- Reduction/settlement of an amount owed by the Supplier to NEXUS.
+- Payment by NEXUS to the Supplier when NEXUS owes the Supplier.
 - Cash.
 - Bank transfer.
 - Another supported settlement method.
 
-The selected settlement method and the amount actually settled must be recorded.
-
-Supporting settlement files/attachments must also be recorded.
+The actual settlement/payment event, amount, method, and supporting files must be recorded.
 
 The actual settlement amount **may differ from the Supplier Return Invoice Total Amount**.
 
 A Supplier Return may have **more than one financial settlement record** over its lifecycle.
 
-A settlement may be **partial**. Therefore, the total of recorded settlement amounts may remain below the Supplier Return Invoice Total Amount, leaving an outstanding/unsettled amount.
+A settlement may be **partial**. Therefore, the Supplier account may retain an outstanding balance after one or more settlement events.
 
-The Supplier Return Invoice amount represents the return document's declared total; it is not a hard constraint on the amount(s) subsequently settled by the Supplier.
-
-## 12. Settlement Timing
+## 13. Settlement Timing
 
 The Supplier Return Invoice supports both settlement timings:
 
 ### Immediate Settlement
 
-The financial refund/settlement is recorded as part of issuing the Supplier Return.
+The Supplier Return is issued, the inventory is reduced, and the applicable settlement/payment event may be recorded in the same operation.
 
-Immediate settlement does not require the settlement amount to equal the Supplier Return Invoice Total Amount and may be partial.
+The immediate settlement does not have to equal the Supplier Return Invoice Total Amount and may be partial.
 
 ### Deferred Settlement
 
-The Supplier Return is issued first and the inventory is reduced immediately, while the financial refund/settlement is recorded later when the Supplier actually performs the agreed settlement.
+The Supplier Return is issued first. Inventory and the Supplier account are adjusted immediately, while the actual settlement/payment is recorded later when the financial transaction occurs.
 
 Deferred settlement may result in one or more later settlement records, including partial settlements.
 
 The choice between Immediate and Deferred Settlement is available on the Supplier Return Invoice itself.
 
-## 13. Supplier Settlement Is Not Forced Into Customer Return Rules
+## 14. Supplier Return Is Not Forced Into Customer Return Rules
 
 Supplier Return settlement is intentionally different from Customer Return settlement.
 
 Customer Return currently requires immediate full settlement using the current Cash refund flow.
 
-Supplier Return allows the settlement timing and settlement method to vary according to the agreement with the Supplier, while recording the actual settlement data and supporting files.
+Supplier Return allows the settlement timing and settlement method to vary according to the actual Supplier account relationship, while the Supplier Return itself always updates the Supplier account immediately.
 
-## 14. Supplier Return Lifecycle
+## 15. Supplier Return Lifecycle
 
 The current discovered lifecycle is:
 
@@ -180,22 +195,25 @@ Create Supplier Return Invoice
         +--> Optional Item Return Prices
         +--> Settlement Timing
                 |
-                +--> Immediate
-                |      |
-                |      +--> Issue Return
-                |      +--> Deduct Stock Immediately
-                |      +--> Record zero, one, or more applicable settlement records
-                |      +--> Settlement may be partial
+                v
+        Issue Supplier Return
                 |
-                +--> Deferred
+                +--> Deduct Stock Immediately
+                |
+                +--> Adjust Supplier Account Immediately
+                |
+                +--> Immediate Settlement
+                |      |
+                |      +--> Record actual payment/settlement if applicable
+                |
+                +--> Deferred Settlement
                        |
-                       +--> Issue Return
-                       +--> Deduct Stock Immediately
-                       +--> Later record one or more actual Supplier Settlement records
-                       +--> Each settlement may be partial
+                       +--> Record later settlement/payment events
+                       +--> Multiple settlements allowed
+                       +--> Partial settlements allowed
 ```
 
-## 15. Explicitly Decided Constraints
+## 16. Explicitly Decided Constraints
 
 The Supplier Return:
 
@@ -210,19 +228,21 @@ The Supplier Return:
 - May optionally contain item-level return prices.
 - Cannot return more than the available stock in the selected Warehouse.
 - Deducts stock immediately on issuance.
+- Adjusts the Supplier account immediately on issuance.
+- May cause the Supplier to become a debtor to NEXUS if the return value exceeds the Supplier's payable balance.
 - May contain the same Product on multiple lines; stock deduction uses the aggregate quantity.
 - Supports immediate or deferred financial settlement.
 - Supports multiple financial settlement records over the Supplier Return lifecycle.
 - Supports partial financial settlement.
 - Does not require settlement amount(s) to equal the Supplier Return Invoice Total Amount.
-- Supports supplier-defined settlement methods, which must be recorded with supporting files.
+- Supports supplier-agreed settlement methods, which must be recorded with supporting files.
 
-## 16. Still Open — Points Not Yet Decided
+## 17. Still Open — Points Not Yet Decided
 
 The following are intentionally not assumed by this document:
 
 - Whether a deferred settlement has a dedicated status/lifecycle before the actual settlement is recorded.
 - The exact supported list and configuration model for settlement methods.
-- The exact accounting treatment of Supplier Return and Supplier settlement.
-- Whether a Supplier Return can be corrected after issuance, since stock is already affected immediately.
+- The exact accounting treatment/ledger structure for the Supplier Return and the resulting Supplier account balance.
+- Whether a Supplier Return can be corrected after issuance, since stock and Supplier account are already affected immediately.
 - Any future rules around taxes, discounts, UOM conversion, batches/lots/serials, or expiry tracking.
