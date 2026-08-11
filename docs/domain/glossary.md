@@ -369,3 +369,19 @@ Download - Customer Return
 Damage
 Miss
 Manual Edit
+```
+---
+
+### Manual Edit
+
+A Stock adjustment that may increase or decrease Stock.
+
+It requires Warehouse Manager approval before it becomes effective.
+
+---
+
+### Debt Attribution
+
+A subdivision of the Supplier Company's actual financial liability among operational dimensions such as Supplier Branch or Representative.
+
+Debt attribution does not create an independent liability.
