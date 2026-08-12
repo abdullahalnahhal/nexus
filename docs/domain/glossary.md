@@ -172,7 +172,7 @@ It currently includes:
 * Takeaway
 * Identified Customer
 
---- 
+---
 
 ## Inventory Terms
 
@@ -226,6 +226,7 @@ Reserved/Damaged/Expired are intentionally not modeled as Stock Details.
 - SELECT
 - MULTI_SELECT
 - BOOLEAN
+
 ---
 
 ## New Terms — Phase 0.2
@@ -370,6 +371,7 @@ Damage
 Miss
 Manual Edit
 ```
+
 ---
 
 ### Manual Edit
@@ -494,3 +496,34 @@ An authorization capability that determines whether a User can perform a specifi
 
 NEXUS does not use job titles as direct authorization rules.
 
+---
+
+## Phase 0.2 Inventory Discovery — Stock Adjustment Final Terms
+
+### Stock Adjustment
+
+An independent Inventory business document used to increase or decrease Current Stock for an allowed business reason.
+
+### Adjustment Reason
+
+The allowed business reason that explains why a Stock Adjustment is being issued.
+
+### Adjustment Reference
+
+An originating business reference associated with a Stock Adjustment when applicable. Reason/Reference provides traceability in the current scope.
+
+### Stock Adjustment Issue
+
+The act of issuing a Stock Adjustment. Issuance is the point at which its Inventory Effect is applied immediately.
+
+### Stock Adjustment Permission
+
+The Permission required to create and issue a Stock Adjustment. No additional Approval step is required.
+
+### Stock Adjustment Immutability
+
+The rule that an issued Stock Adjustment cannot be edited or cancelled.
+
+### Stock Adjustment Traceability
+
+The ability to explain an Adjustment through its allowed Reason and/or originating Reference. Attachments are not required in the current scope.
