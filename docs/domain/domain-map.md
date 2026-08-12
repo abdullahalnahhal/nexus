@@ -223,6 +223,7 @@ The following relationships are not finalized:
 * Exact User/Role/Permission model.
 
 ---
+
 ## Inventory
 
 Category
@@ -365,7 +366,6 @@ NEXUS
 ## Supplier Relationship
 
 ```text
-
 Supplier Company
        │
        ├── Branch A
@@ -378,17 +378,16 @@ Supplier Company
              ├── Manager
              └── Representative(s)
 ```
+
 ----
 
 ## Important distinction
 
 ```text
-
 Supplier Company
       │
       ▼
 Actual Financial Liability
-
 ```
 
 versus:
@@ -401,7 +400,6 @@ Representative
       │
       ▼
 Debt Attribution
-
 ```
 
 Representative/Branch attribution is not an independent financial liability.
@@ -411,7 +409,6 @@ Representative/Branch attribution is not an independent financial liability.
 ## Purchase Flow
 
 ```text
-
 Purchase Invoice
       │
       ├── Financial Effect
@@ -430,7 +427,6 @@ Purchase Invoice
 ## Supplier Return Flow
 
 ```text
-
 Supplier Return Invoice
       │
       ├── Inventory Effect
@@ -446,11 +442,13 @@ Supplier Return Invoice
               ├── Cash
               └── Offset
 ```
+
 The financial effect is determined by the Return Invoice and is not automatically inferred from the Stock movement.
 
 ---
 
 ## Transfer
+
 ```text
 Destination Request
        │
@@ -470,7 +468,9 @@ Destination Approval
        ▼
 Transfer Execution
 ```
+
 Execution produces two Stock movements:
+
 ```text
 Source
   │
@@ -480,6 +480,7 @@ Source
               │
               └── Download - Transfer
 ```
+
 ## Phase 0.2 Inventory Discovery — Checkpoint 0.2-A
 
 > This section extends the existing Domain Map.
@@ -498,14 +499,19 @@ Product
                     |
                     +-- Inventory Movements
 ```
+
 The current Inventory identity is:
+
 ```text
 Product + Warehouse
 ```
+
 The existing Product / Variant model remains valid.
 
 ---
+
 ## Product–Warehouse Setup
+
 ```text
 Product
    |
@@ -517,15 +523,19 @@ Product
                        |
                        +---- Inventory Movements
 ```
+
 The Product–Warehouse Setup establishes that the Product is managed within the Warehouse.
 
 The Setup starts with:
+
 ```text
 Current Stock = 0
 ```
+
 unless an Opening Balance subsequently establishes another quantity.
 
 ---
+
 ## Inventory Documents
 
 ```text
@@ -542,10 +552,13 @@ Business Documents
        +-- Write-off / Depreciation
        +-- Opening Balance
 ```
+
 Each is an independent business document.
 
 ---
+
 ## Document to Inventory Flow
+
 ### Non-Approval Documents
 
 ```text
@@ -563,10 +576,12 @@ Sale / Purchase / Return
           ▼
     Current Stock
 ```
+
 ---
+
 ### Approval-Controlled Documents
 
-```text 
+```text
 Transfer / Adjustment / Loss /
 Write-off / Opening Balance
           |
@@ -585,8 +600,11 @@ Write-off / Opening Balance
           ▼
     Current Stock
 ```
+
 ---
+
 ## Inventory Movement
+
 ```text
 Inventory Movement
    |
@@ -595,15 +613,16 @@ Inventory Movement
    +-- Quantity
    +-- Business Document Reference
 ```
+
 Cost is not part of Inventory Movement.
 
 Cost remains within the relevant Business Document / Invoice.
 
 ---
-##Current Stock and Movement History
+
+## Current Stock and Movement History
 
 ```text
-
                     +------------------+
                     | Inventory        |
                     | Movement History |
@@ -617,11 +636,13 @@ Business Document -----------+
                     | Current Stock    |
                     +------------------+
 ```
+
 Current Stock is the persisted operational state.
 
 Inventory Movements preserve the historical explanation of changes.
 
 ---
+
 ## Transfer
 
 ```text
@@ -643,6 +664,7 @@ The two Inventory effects are atomic.
 There is no In-Transit Inventory concept.
 
 ---
+
 ## Product–Warehouse Lifecycle
 
 ```text
@@ -665,6 +687,7 @@ Stock = 0
    ▼
 Deactivated
 ```
+
 A Product–Warehouse Setup cannot be deactivated while Stock is greater than zero.
 
 Deactivation is logical.
@@ -674,7 +697,6 @@ Deactivation is logical.
 ## Authorization
 
 ```text
-
 User
   |
   ▼
@@ -690,6 +712,7 @@ Permissions
 The Domain Model does not depend on job titles such as Manager.
 
 ---
+
 ## Reconciliation
 
 ```text
@@ -705,4 +728,68 @@ Corrective Inventory Movement
       ▼
 Current Stock
 ```
+
 The historical Movement trail remains preserved.
+
+---
+
+## Stock Adjustment — Final Domain Synchronization
+
+```text
+Stock Adjustment Document
+        |
+        +-- Warehouse / Stock Context
+        +-- Product Lines
+        +-- Allowed Reason
+        +-- Optional Originating Reference
+        |
+        +-- Permission-based Issuance
+        |
+        ▼
+Immediate Inventory Effect
+        |
+        ▼
+Current Stock
+```
+
+### Authorization Boundary
+
+```text
+User
+  |
+  ▼
+Required Permission
+  +
+Allowed Reason
+  |
+  ▼
+Issue Stock Adjustment
+```
+
+No separate Approval state exists for Stock Adjustment.
+
+### Lifecycle Boundary
+
+```text
+Draft / Creation
+      ↓
+Issue
+      ↓
+Immediate Stock Effect
+      ↓
+Immutable
+```
+
+An issued Stock Adjustment cannot be edited or cancelled.
+
+### Traceability Boundary
+
+Reason and/or originating Reference provide traceability. Attachments are not required.
+
+### Accounting Boundary
+
+Stock Adjustment has no Accounting effect in the current scope.
+
+### Deferred Boundary
+
+UOM, costing, valuation, and future accounting treatment remain outside the current Stock Adjustment discovery.
