@@ -37,3 +37,19 @@ Rekik, Y., Oliva, R., Glock, C. H., & Syntetos, A. — *Inventory record inaccur
 ### Reference boundary
 
 These references inform the domain discovery only. They do not dictate NEXUS implementation or override decisions made during the NEXUS discovery process.
+
+---
+
+## Documentation Synchronization — 2026-08-12
+
+The references support the final modeling boundary but do not override the decisions reached during NEXUS discovery:
+
+- Adjustment is a business document rather than an unexplained direct stock mutation.
+- Reason/Reference provides the required traceability in the current scope.
+- Authorization is permission-based.
+- The inventory effect occurs at issuance.
+- Attachments are not required for Stock Adjustment.
+- The document is immutable after issuance.
+- Accounting treatment is explicitly outside the current Stock Adjustment scope.
+
+These are **NEXUS decisions**, informed by the references rather than copied from them.
