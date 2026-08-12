@@ -170,6 +170,7 @@ NEXUS will eventually support Online Customers.
 Online Customers will operate against a dedicated Online Warehouse.
 
 This domain is intentionally deferred until the physical NEXUS domain is completed.
+
 ---
 
 ## Phase 0.2 — Inventory Discovery Update
@@ -187,3 +188,29 @@ Stock is maintained per Product Variant in a Warehouse. Stock is the current phy
 When goods are damaged, expired, or otherwise written off, the quantity is reduced and the reason belongs to a separate future Wastage/Loss or Stock Movement concept.
 
 This section records business discoveries only; implementation details remain open.
+
+---
+
+## Phase 0.2 — Stock Adjustment Discovery Synchronization
+
+A Stock Adjustment is an independent Inventory business document used to correct Stock for an allowed business reason.
+
+A user may create it manually when the user has the required Permission and the reason is allowed. No additional Approval step is required for Stock Adjustment.
+
+The business flow is:
+
+```text
+Allowed Reason + Required Permission
+              ↓
+      Issue Stock Adjustment
+              ↓
+       Immediate Stock Effect
+```
+
+The same Product may appear on multiple Adjustment lines; the resulting Stock effect uses the aggregate quantity for that Product.
+
+Reason/Reference is sufficient for traceability in the current scope. Attachments are not required.
+
+After issuance, the Stock Adjustment cannot be edited or cancelled. It has no accounting effect, and no separate document reference-number requirement is introduced in the current phase.
+
+UOM and costing are deliberately deferred.
