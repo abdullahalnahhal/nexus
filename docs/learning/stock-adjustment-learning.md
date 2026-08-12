@@ -26,3 +26,23 @@ Stock Adjustment preserves the distinction between **business authorization** an
 - Costing / inventory valuation.
 - Any future accounting treatment.
 - Detailed catalog design for allowed adjustment reasons.
+
+---
+
+## Documentation Synchronization — 2026-08-12
+
+The finalized discovery also establishes that Stock Adjustment is a **permission-controlled inventory operation without an additional approval state**. This supersedes the earlier provisional wording that specifically referred to Warehouse Manager approval.
+
+The final boundary is:
+
+```text
+Allowed Reason
+      +
+Required Permission
+      ↓
+Issue Stock Adjustment
+      ↓
+Immediate Stock Effect
+```
+
+The document itself is immutable after issuance, so later correction is not performed by editing or cancelling the issued Adjustment.
